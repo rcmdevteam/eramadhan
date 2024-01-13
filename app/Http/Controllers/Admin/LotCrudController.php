@@ -2,24 +2,19 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\MasjidRequest;
-use App\Models\Masjid;
-use App\Models\MasjidUser;
+use App\Http\Requests\LotRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
-use Illuminate\Support\Facades\Auth;
 
 /**
- * Class MasjidCrudController
+ * Class LotCrudController
  * @package App\Http\Controllers\Admin
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
-class MasjidCrudController extends CrudController
+class LotCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation {
-        store as traitStore;
-    }
+    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
@@ -31,9 +26,9 @@ class MasjidCrudController extends CrudController
      */
     public function setup()
     {
-        CRUD::setModel(\App\Models\Masjid::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/masjid');
-        CRUD::setEntityNameStrings('masjid', 'masjids');
+        CRUD::setModel(\App\Models\Lot::class);
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/lot');
+        CRUD::setEntityNameStrings('lot', 'lots');
     }
 
     /**
@@ -44,11 +39,14 @@ class MasjidCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        // CRUD::column('id');
-        CRUD::column('name');
-        CRUD::column('location');
-        // CRUD::column('created_at');
-        // CRUD::column('updated_at');
+        CRUD::column('id');
+        CRUD::column('ramadhan_id');
+        CRUD::column('hari');
+        CRUD::column('sasaran');
+        CRUD::column('jumlah_lot');
+        // CRUD::column('masjid_id');
+        CRUD::column('created_at');
+        CRUD::column('updated_at');
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -65,43 +63,22 @@ class MasjidCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
-        CRUD::setValidation(MasjidRequest::class);
+        CRUD::setValidation(LotRequest::class);
 
-        CRUD::field('name');
-        CRUD::field('location');
-        // CRUD::field('created_at');
+        CRUD::field('hari');
+        // CRUD::field('id');
+        CRUD::field('jumlah_lot');
+        CRUD::field('masjid_id');
+        CRUD::field('ramadhan_id');
+        CRUD::field('sasaran');
         // CRUD::field('updated_at');
+        // CRUD::field('created_at');
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:
          * - CRUD::field('price')->type('number');
          * - CRUD::addField(['name' => 'price', 'type' => 'number'])); 
          */
-    }
-
-    protected function store()
-    {
-        // dd(request()->all());
-
-        $user = Auth::user();
-
-        // Check if the user has a masjid_user record
-        if (!$user->masjids()->exists()) {
-            // If not, create a masjid_user record
-            $masjid = Masjid::create([
-                'name' => request()->name,
-                'location' => request()->location
-            ]);
-
-            MasjidUser::create([
-                'masjid_id' => $masjid->id,
-                'user_id' => auth()->user()->id
-            ]);
-
-            $user->assignRole('Admin');
-        }
-
-        return redirect(backpack_url('/dashboard'));
     }
 
     /**

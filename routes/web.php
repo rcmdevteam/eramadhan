@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Masjid;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,6 +17,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('public');
+});
+
+Route::get('/home', function () {
+    return redirect(backpack_url('/dashboard'));
 });
 
 Route::get('/payment/toyyibpay/callback', function (Request $request) {
@@ -88,8 +93,9 @@ Route::get('/payment/toyyibpay/callback', function (Request $request) {
 });
 
 
-Route::prefix('/{masjid}')->middleware(['checking'])->group(function () {
+Route::prefix('/p/{masjid}')->middleware(['checking'])->group(function () {
     Route::get('/', function ($masjid) {
+        Masjid::where('name', $masjid)->firstOrFail();
         return view('collections.index', compact('masjid'));
     });
 

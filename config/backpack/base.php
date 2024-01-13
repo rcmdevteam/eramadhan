@@ -24,7 +24,7 @@ return [
     // ----
 
     // Project name. Shown in the window title.
-    'project_name' => 'eRamadhan',
+    'project_name' => 'eRamadhan<',
 
     // When clicking on the admin panel's top-left logo/name,
     // where should the user be redirected?
@@ -73,7 +73,7 @@ return [
     // ------
 
     // Menu logo. You can replace this with an <img> tag if you have a logo.
-    'project_logo'   => 'eRamadhan',
+    'project_logo'   => '<span class="text-primary">eRamadhan</span>',
 
     // Show / hide breadcrumbs on admin panel pages.
     'breadcrumbs' => true,

@@ -1,6 +1,5 @@
 @role('Admin')
-    <strong class="nav-item text-dark"><small class="ml-2 font-weight-bold">UTAMA</small></strong>
-    <li class='nav-item'><a class='nav-link' href='#''><i class='nav-icon la la-bar-chart'></i> Koleksi</a></li>
+    <strong class="nav-item text-dark mt-4"><small class="ml-2 font-weight-bold">UTAMA</small></strong>
 @endrole
 
 @role('Dakwah')
@@ -25,9 +24,20 @@
     </li>
 @endrole
 
-@role(['Admin', 'Superadmin'])
-    <li class='nav-item'><a class='nav-link' href='{{ backpack_url('masjid') }}'><i class='nav-icon la la-info'></i>
-            Masjids</a></li>
+@role(['Admin'])
+    <li class='nav-item'><a class='nav-link' href='{{ backpack_url('dashboard') }}'><i class='nav-icon la la-question'></i>
+            Paparan</a></li>
+    <li class='nav-item'><a class='nav-link' href='{{ backpack_url('transaksi') }}'><i class='nav-icon la la-question'></i>
+            Transaksi</a></li>
+    <strong class="nav-item text-dark mt-4"><small class="ml-2 font-weight-bold">SETTING</small></strong>
+    <li class='nav-item'><a class='nav-link' href='{{ backpack_url('lot') }}'><i class='nav-icon la la-question'></i>
+            Lots</a></li>
+    <li class='nav-item'><a class='nav-link' href='{{ backpack_url('ramadhan') }}'><i class='nav-icon la la-question'></i>
+            Ramadhan</a></li>
+    <li class='nav-item'><a class='nav-link'
+            href='{{ backpack_url('masjid/' . auth()->user()->masjids->masjid_id . '/edit') }}'><i
+                class='nav-icon la la-info'></i>
+            Masjid</a></li>
 @endrole
 
 @role('Superadmin')
@@ -35,8 +45,14 @@
                 class="la la-home nav-icon"></i>
             {{ trans('backpack::base.dashboard') }}</a></li>
     <strong class="nav-item text-dark mt-2"><small class="ml-2 font-weight-bold">SUPERADMIN</small></strong>
+    <li class='nav-item'><a class='nav-link' href='{{ backpack_url('masjid') }}'><i class='nav-icon la la-question'></i>
+            Masjid</a></li>
     <li class='nav-item'><a class='nav-link' href='{{ backpack_url('masjid-user') }}'><i
                 class='nav-icon la la-question'></i> Masjid users</a></li>
+    <li class='nav-item'><a class='nav-link' href='{{ backpack_url('ramadhan') }}'><i class='nav-icon la la-question'></i>
+            Ramadhans</a></li>
+    <li class='nav-item'><a class='nav-link' href='{{ backpack_url('transaksi') }}'><i class='nav-icon la la-question'></i>
+            Transaksi</a></li>
     <li class='nav-item d-none'><a class='nav-link' href='{{ backpack_url('categories') }}'><i
                 class='nav-icon la la-box'></i>
             Categories</a></li>
