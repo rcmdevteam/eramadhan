@@ -19,14 +19,14 @@ Route::group([
 ], function () { // custom admin routes
     Route::get('dashboard', 'DashboardController@index');
     Route::crud('user', 'UsersCrudController');
-    Route::crud('profiles', 'ProfilesCrudController');
-    Route::crud('categories', 'CategoriesCrudController');
-    Route::crud('topics', 'TopicsCrudController');
-    Route::crud('profile-category', 'ProfileCategoryCrudController');
-    Route::crud('profile-topics', 'ProfileTopicsCrudController');
-    Route::crud('orders', 'OrdersCrudController');
-    Route::crud('order-details', 'OrderDetailsCrudController');
-    Route::crud('profile-sponsors', 'ProfileSponsorsCrudController');
+    // Route::crud('profiles', 'ProfilesCrudController');
+    // Route::crud('categories', 'CategoriesCrudController');
+    // Route::crud('topics', 'TopicsCrudController');
+    // Route::crud('profile-category', 'ProfileCategoryCrudController');
+    // Route::crud('profile-topics', 'ProfileTopicsCrudController');
+    // Route::crud('orders', 'OrdersCrudController');
+    // Route::crud('order-details', 'OrderDetailsCrudController');
+    // Route::crud('profile-sponsors', 'ProfileSponsorsCrudController');
 
     Route::impersonate();
     Route::get('user/{id}/impersonate', function ($id) {
@@ -41,4 +41,6 @@ Route::group([
 
         return redirect(backpack_url() . '/user');
     });
+    Route::crud('masjid', 'MasjidCrudController');
+    Route::crud('masjid-user', 'MasjidUserCrudController');
 }); // this should be the absolute last line of this file

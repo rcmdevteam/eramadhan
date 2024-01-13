@@ -6,14 +6,20 @@
     @include(backpack_view('inc.head'))
     <style>
         body {
-            background-image: url('/images/bg-11.jpg');
+            /* background-image: url('/images/bg-11.jpg'); */
             background-position: top right;
             background-attachment: fixed;
             background-repeat: no-repeat;
             font-family: 'Inter', sans-serif;
         }
-        h1, h2, h3, h4, h5, h6 {
-            font-weight: 700; 
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-weight: 700;
         }
 
         .sidebar a.nav-link {
