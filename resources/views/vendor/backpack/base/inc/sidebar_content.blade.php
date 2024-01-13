@@ -80,3 +80,10 @@
     <li class='nav-item'><a class='nav-link' href='{{ backpack_url('log') }}'><i class='nav-icon la la-terminal'></i>
             Logs</a></li>
 @endrole
+
+@role('Admin')
+    <strong class="nav-item text-dark mt-4"><small class="ml-2 font-weight-bold">Link</small></strong>
+    <li class='nav-item'><a target="_blank" class='nav-link'
+            href='{{ url('/p/' . auth()->user()->masjids->masjid->name) }}'><i class='nav-icon la la-share'></i>
+            Online Link</a></li>
+@endrole

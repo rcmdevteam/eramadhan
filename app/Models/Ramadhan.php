@@ -19,7 +19,7 @@ class Ramadhan extends Model
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
-    // protected $fillable = [];
+    protected $fillable = ['masjid_id', 'tahun'];
     // protected $hidden = [];
     // protected $dates = [];
 
@@ -34,6 +34,10 @@ class Ramadhan extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
+    public function masjid()
+    {
+        return $this->belongsTo(Masjid::class);
+    }
 
     /*
     |--------------------------------------------------------------------------

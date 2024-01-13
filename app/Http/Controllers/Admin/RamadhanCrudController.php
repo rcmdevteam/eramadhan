@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\RamadhanRequest;
 use App\Models\Lot;
+use App\Models\Ramadhan;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
@@ -42,6 +43,8 @@ class RamadhanCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+        $this->crud->query->where('masjid_id', auth()->user()->masjids->masjid->id);
+
         CRUD::column('id');
         CRUD::column('masjid_id');
         CRUD::column('tahun');
@@ -78,13 +81,18 @@ class RamadhanCrudController extends CrudController
 
     protected function store()
     {
-        for ($i = 1; $i < 30; $i++) {
+        $ramadhan = Ramadhan::create([
+            'masjid_id' => request()->masjid_id,
+            'tahun' => request()->tahun,
+        ]);
+
+        for ($i = 1; $i < 31; $i++) {
             Lot::create([
                 'hari' => $i,
                 'sasaran' => '1000',
                 'jumlah_lot' => '100',
                 'masjid_id' => auth()->user()->masjids->masjid->id,
-                'ramadhan_id' => $this->crud->entry->id,
+                'ramadhan_id' => $ramadhan->id,
             ]);
         }
 

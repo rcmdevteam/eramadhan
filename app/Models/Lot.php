@@ -28,6 +28,15 @@ class Lot extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
+    public function ramadhan()
+    {
+        return $this->belongsTo(Ramadhan::class);
+    }
+
+    public function masjid()
+    {
+        return $this->belongsTo(Masjid::class);
+    }
 
     /*
     |--------------------------------------------------------------------------

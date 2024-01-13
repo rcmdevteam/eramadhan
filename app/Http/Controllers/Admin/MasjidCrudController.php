@@ -69,8 +69,8 @@ class MasjidCrudController extends CrudController
 
         CRUD::field('name');
         CRUD::field('location');
-        // CRUD::field('created_at');
-        // CRUD::field('updated_at');
+        CRUD::field('toyyibpay_secret_key');
+        CRUD::field('toyyibpay_collection_id');
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:

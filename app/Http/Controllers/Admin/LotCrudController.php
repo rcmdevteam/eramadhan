@@ -39,9 +39,11 @@ class LotCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::column('id');
-        CRUD::column('ramadhan_id');
+        $this->crud->query->where('masjid_id', auth()->user()->masjids->masjid->id);
+
+        // CRUD::column('id');
         CRUD::column('hari');
+        CRUD::column('ramadhan_id');
         CRUD::column('sasaran');
         CRUD::column('jumlah_lot');
         // CRUD::column('masjid_id');
