@@ -45,7 +45,9 @@ class LotCrudController extends CrudController
         CRUD::column('hari');
         CRUD::column('ramadhan_id');
         CRUD::column('sasaran');
+        CRUD::column('quota');
         CRUD::column('jumlah_lot');
+        CRUD::column('description');
         // CRUD::column('masjid_id');
         CRUD::column('created_at');
         CRUD::column('updated_at');
@@ -69,10 +71,12 @@ class LotCrudController extends CrudController
 
         CRUD::field('hari');
         // CRUD::field('id');
+        CRUD::column('quota');
         CRUD::field('jumlah_lot');
         CRUD::field('masjid_id');
         CRUD::field('ramadhan_id');
         CRUD::field('sasaran');
+        CRUD::field('description');
         // CRUD::field('updated_at');
         // CRUD::field('created_at');
 

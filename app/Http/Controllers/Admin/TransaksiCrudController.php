@@ -39,7 +39,14 @@ class TransaksiCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-
+        CRUD::column('id');
+        CRUD::column('nama');
+        CRUD::column('emel');
+        CRUD::column('telefon');
+        CRUD::column('hari');
+        CRUD::column('jumlah');
+        CRUD::column('status');
+        CRUD::column('mark_as_paid');
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -58,7 +65,11 @@ class TransaksiCrudController extends CrudController
     {
         CRUD::setValidation(TransaksiRequest::class);
 
-
+        CRUD::field('nama');
+        CRUD::field('emel');
+        CRUD::field('telefon');
+        CRUD::field('ramadhan');
+        CRUD::field('jumlah');
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:

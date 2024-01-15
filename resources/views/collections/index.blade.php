@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>{{ $masjid->name }} :: {{ config('app.name') }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_token" content="{{ csrf_token() }}">
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
@@ -26,7 +27,7 @@
                 <div class="flex flex-col gap-4 text-center w-[450px] ml-auto mr-auto">
                     <h2 class="uppercase text-sm font-bold">Pilih Lot</h2>
                     @foreach ($lots as $lot)
-                        <div class="p-4 bg-white rounded-md hover:shadow mx-4 md:mx-0 lot-ramadhan cursor-pointer"
+                        <div class="p-4 {{ $lot->quota - $lot->transactions->where('status', 'paid')->count() == 0 ? 'bg-slate-400' : 'bg-white' }} rounded-md hover:shadow mx-4 md:mx-0 lot-ramadhan cursor-pointer"
                             data-lotid="{{ $lot->id }}" data-hari="{{ $lot->hari }}"
                             data-jumlah="{{ $lot->jumlah_lot }}" data-ramadhan="{{ $lot->ramadhan->id }}"
                             data-masjid="{{ $lot->masjid->id }}">
@@ -35,11 +36,16 @@
                                     <div class="p-2 rounded-md bg-zinc-100">
                                         <h5 class="text-xs">ramadhan</h5>
                                         <h2 class="text-2xl">{{ $lot->hari }}</h2>
+                                        <p class="text-xs text-gray-500">1 Mac 2023 (Selasa)</p>
                                     </div>
                                 </div>
                                 <div class="text-right flex flex-col items-right w-full pt-1">
-                                    <h3 class="font-bold">RM {{ $lot->jumlah_lot }}</h3>
-                                    <p class="invisible">10/10</p>
+                                    <h3 class="font-bold">RM {{ $lot->jumlah_lot }} / lot</h3>
+                                    <p class="text-sm text-gray-500">Jumlah Tajaan: RM {{ $lot->sasaran }}</p>
+                                    <p class="text-sm text-gray-500">Lot Kosong: <span
+                                            class="text-red-600 font-bold">{{ $lot->quota - $lot->transactions->where('status', 'paid')->count() }}/{{ $lot->quota }}</span>
+                                    </p>
+                                    <p class="text-sm text-gray-500">{{ $lot->description }}</p>
                                 </div>
                             </div>
                         </div>
@@ -80,7 +86,7 @@
                 </div>
             </div>
         </div>
-        <form action="{{ url('/p/' . $masjid->name . '/payment') }}" method="POST" id="form_bayaran">
+        <form action="{{ url($masjid->short_name . '/payment') }}" method="POST" id="form_bayaran">
             <div class="flex flex-col items-left justify-center p-8">
                 <label for="name" class="flex text-left mb-2 text-sm text-gray-900">
                     Nama
@@ -129,6 +135,7 @@
                 var jumlah = $(this).data("jumlah");
                 var ramadhan = $(this).data("ramadhan");
                 var masjid = $(this).data("masjid");
+                var csrfToken = $('meta[name="_token"]').attr('content');
 
                 // return console.log('lotid:' + lotid + ' hari:' + hari + ' jumlah:' + jumlah + ' ramadhan:' +
                 //     ramadhan +
@@ -143,6 +150,7 @@
                 $("#form_container #jumlah").val(jumlah);
                 $("#form_container #masjid").val(masjid);
                 $("#form_container #ramadhan").val(ramadhan);
+                $('#form_container').find('input[name="_token"]').val(csrfToken);
 
                 // Toggle classes to show the form
                 $('#form_backdrop').removeClass("invisible").addClass("visible");

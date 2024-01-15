@@ -85,15 +85,18 @@ class RamadhanCrudController extends CrudController
             'masjid_id' => request()->masjid_id,
             'tahun' => request()->tahun,
         ]);
-
-        for ($i = 1; $i < 31; $i++) {
-            Lot::create([
-                'hari' => $i,
-                'sasaran' => '1000',
-                'jumlah_lot' => '100',
-                'masjid_id' => auth()->user()->masjids->masjid->id,
-                'ramadhan_id' => $ramadhan->id,
-            ]);
+        // dd($ramadhan, request()->all());
+        if ($ramadhan) {
+            for ($i = 1; $i < 31; $i++) {
+                Lot::create([
+                    'hari' => $i,
+                    'sasaran' => '1000',
+                    'jumlah_lot' => '100',
+                    'masjid_id' => auth()->user()->masjids->masjid->id,
+                    'ramadhan_id' => $ramadhan->id,
+                    'description' => 'Iftar/Moreh/Bubur Lambuk'
+                ]);
+            }
         }
 
         // $redirect_location = $this->traitStore();

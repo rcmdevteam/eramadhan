@@ -26,8 +26,8 @@ Route::get('/home', function () {
     return redirect(backpack_url('/dashboard'));
 });
 
-Route::get('/payment/toyyibpay/callback', function (Request $request) {
-
+Route::any('/payment/toyyibpay/callback', function (Request $request) {
+    \Log::info(request()->all());
     $transactionReferenceNo = $request->input('order_id');
 
     $checkReference = explode('&', $transactionReferenceNo);
@@ -45,7 +45,7 @@ Route::get('/payment/toyyibpay/callback', function (Request $request) {
 
         // Update Order
         $transactionUpdate                     = RamadhanTransaction::find($transactionId);
-        $transactionUpdate->status             = '2'; // approved invoice
+        $transactionUpdate->status             = 'paid'; // approved invoice
         // $transactionUpdate->receipt            = 'toyyibpay.png';
         $transactionUpdate->mark_as_paid       = \Carbon\Carbon::now();
         $transactionUpdate->toyyibpay_refno    = request('refno');
@@ -88,9 +88,9 @@ Route::get('/payment/toyyibpay/callback', function (Request $request) {
 });
 
 
-Route::prefix('/p/{masjid}')->middleware(['checking'])->group(function () {
+Route::prefix('{masjid}')->middleware(['checking'])->group(function () {
     Route::get('/', function ($masjid) {
-        $masjid = Masjid::where('name', $masjid)->firstOrFail();
+        $masjid = Masjid::where('short_name', $masjid)->firstOrFail();
         $ramadhan = Ramadhan::where('tahun', 1445)->where('masjid_id', $masjid->id)->firstOrFail();
         $lots = Lot::where('masjid_id', $masjid->id)->where('ramadhan_id', $ramadhan->id)->orderBy('hari', 'ASC')->get();
 
@@ -98,55 +98,74 @@ Route::prefix('/p/{masjid}')->middleware(['checking'])->group(function () {
     });
 
     Route::post('/payment', function ($masjid) {
-        dd($masjid, request()->all());
 
-        $masjid = Masjid::where('name', $masjid)->first();
-        $name = '';
-        $email = '';
-        $phone = '';
+        $masjid = Masjid::where('short_name', $masjid)->firstOrFail();
+        $masjidname = $masjid->name;
+
+        $name = request()->nama;
+        $email = request()->email;
+        $phone = request()->phone;
+        $jumlah = request()->jumlah;
+        $hari = request()->hari;
+        $lotid = request()->lotid;
+        $masjid = request()->masjid;
+        $ramadhan = request()->ramadhan;
 
         // perform insert transaction
-        $transaction = RamadhanTransaction::create(request()->except('_token'));
+        $transaction = new RamadhanTransaction();
+        $transaction->nama = $name;
+        $transaction->emel = $email;
+        $transaction->telefon = $phone;
+        $transaction->ramadhan = $hari;
+        $transaction->jumlah = $jumlah;
+        $transaction->kuantiti = 1;
+        // $transaction->toyyibpay_ref = '';
+        $transaction->status = 'unpaid';
+        $transaction->ramadhan_id = $ramadhan;
+        $transaction->masjid_id = $masjid;
+        $transaction->lot_id = $lotid;
+        $transaction->save();
 
-        if (is_null($masjid->toyyibpay_secret_key) && is_null($masjid->toyyibpay_collection_id)) {
-            return redirect()->back()->with('bill_error', true)->with('message', 'No payment gateway setup.');
-        }
+        // if (is_null($masjid->toyyibpay_secret_key) && is_null($masjid->toyyibpay_collection_id)) {
+        //     return redirect()->back()->with('bill_error', true)->with('message', 'No payment gateway setup.');
+        // }
 
-        $amountToPay = collect(\Money\Money::MYR(number_format(request()->amount, 2, '', '')))->toArray();
+        $amountToPay = collect(\Money\Money::MYR(number_format($jumlah, 2, '', '')))->toArray();
 
-        if ($masjid->option_toyyibpay_type == null) {
-            $toyyibPayMethod = 0;
-        } else {
-            $toyyibPayMethod = $masjid->option_toyyibpay_type;
-        }
+        // if ($masjid->option_toyyibpay_type == null) {
+        // $toyyibPayMethod = 0;
+        // } else {
+        // $toyyibPayMethod = $masjid->option_toyyibpay_type;
+        // }
 
         // Perform Toyyibpay
         $toyyibpay = new \GuzzleHttp\Client(); //GuzzleHttp\Client
         $result    = $toyyibpay->post('https://dev.toyyibpay.com/index.php/api/createBill', [
             'form_params' => [
-                'userSecretKey'           => $masjid->toyyibpay_secret_key,
-                'categoryCode'            => $masjid->toyyibpay_collection_id,
-                'billName'                => 'Lot Masjid no ' . $transaction->id,
-                'billDescription'         => 'Details for order no ' . $transaction->id,
+                // 'userSecretKey'           => $masjid->toyyibpay_secret_key,
+                'userSecretKey'           => env('TOY_SKEY'),
+                'categoryCode'            => env('TOY_CID'),
+                'billName'                => $name,
+                'billDescription'         => 'Bayaran Lot: ' . $lotid . ' untuk Ramadhan: ' . $ramadhan,
                 'billPriceSetting'        => 1,
                 'billPayorInfo'           => 1, // fix toyyibpay covid
                 'billAmount'              => $amountToPay['amount'],
                 'billReturnUrl'           => \URL::previous(),
-                'billCallbackUrl'         => config('app.url') . '/payment/toyyibpay/callback',
-                'billExternalReferenceNo' => $masjid->id . '&' . $transaction->id, // StoreID & OrderId
+                'billCallbackUrl'         => 'https://2055-180-74-66-131.ngrok-free.app' . '/payment/toyyibpay/callback',
+                'billExternalReferenceNo' => $masjid . '&' . $transaction->id, // StoreID & OrderId
                 'billTo'                  => $name,
                 'billEmail'               => $email,
                 'billPhone'               => $phone,
                 'billSplitPayment'        => 0,
                 'billSplitPaymentArgs'    => '',
-                'billPaymentChannel'      => $toyyibPayMethod,
+                'billPaymentChannel'      => config('payment.toyyibpay.payment_type'),
             ],
         ]);
 
         $banks = json_decode($result->getBody());
 
         foreach ($banks as $bank) {
-            return redirect()->to('https://toyyibpay.com/' . $bank->BillCode);
+            return redirect()->to('https://dev.toyyibpay.com/' . $bank->BillCode);
         }
     });
 });

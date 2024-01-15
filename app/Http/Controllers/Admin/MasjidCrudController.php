@@ -68,9 +68,10 @@ class MasjidCrudController extends CrudController
         CRUD::setValidation(MasjidRequest::class);
 
         CRUD::field('name');
+        CRUD::field('short_name');
         CRUD::field('location');
-        CRUD::field('toyyibpay_secret_key');
-        CRUD::field('toyyibpay_collection_id');
+        // CRUD::field('toyyibpay_secret_key');
+        // CRUD::field('toyyibpay_collection_id');
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:
@@ -103,6 +104,7 @@ class MasjidCrudController extends CrudController
 
         return redirect(backpack_url('/dashboard'));
     }
+
 
     /**
      * Define what happens when the Update operation is loaded.

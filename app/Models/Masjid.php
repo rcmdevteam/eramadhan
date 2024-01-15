@@ -19,7 +19,7 @@ class Masjid extends Model
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
-    protected $fillable = ['name', 'location'];
+    protected $fillable = ['name', 'location', 'toyyibpay_secret_key', 'toyyibpay_collection_id', 'option_toyyibpay_type', 'short_name'];
     // protected $hidden = [];
     // protected $dates = [];
 

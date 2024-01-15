@@ -25,18 +25,19 @@
 @endrole
 
 @role(['Admin'])
-    <li class='nav-item'><a class='nav-link' href='{{ backpack_url('dashboard') }}'><i class='nav-icon la la-question'></i>
+    <li class='nav-item'><a class='nav-link' href='{{ backpack_url('dashboard') }}'><i class='nav-icon la la-desktop'></i>
             Paparan</a></li>
-    <li class='nav-item'><a class='nav-link' href='{{ backpack_url('transaksi') }}'><i class='nav-icon la la-question'></i>
+    <li class='nav-item'><a class='nav-link' href='{{ backpack_url('transaksi') }}'><i class='nav-icon la la-coins'></i>
             Transaksi</a></li>
     <strong class="nav-item text-dark mt-4"><small class="ml-2 font-weight-bold">SETTING</small></strong>
-    <li class='nav-item'><a class='nav-link' href='{{ backpack_url('lot') }}'><i class='nav-icon la la-question'></i>
+    <li class='nav-item'><a class='nav-link' href='{{ backpack_url('lot') }}'><i class='nav-icon la la-box'></i>
             Lots</a></li>
-    <li class='nav-item'><a class='nav-link' href='{{ backpack_url('ramadhan') }}'><i class='nav-icon la la-question'></i>
+    <li class='nav-item'><a class='nav-link' href='{{ backpack_url('ramadhan') }}'><i
+                class='nav-icon la la-star-and-crescent'></i>
             Ramadhan</a></li>
     <li class='nav-item'><a class='nav-link'
             href='{{ backpack_url('masjid/' . auth()->user()->masjids->masjid_id . '/edit') }}'><i
-                class='nav-icon la la-info'></i>
+                class='nav-icon la la-mosque'></i>
             Masjid</a></li>
 @endrole
 
@@ -84,6 +85,6 @@
 @role('Admin')
     <strong class="nav-item text-dark mt-4"><small class="ml-2 font-weight-bold">Link</small></strong>
     <li class='nav-item'><a target="_blank" class='nav-link'
-            href='{{ url('/p/' . auth()->user()->masjids->masjid->name) }}'><i class='nav-icon la la-share'></i>
+            href='{{ url('/p/' . auth()->user()->masjids->masjid->name) }}'><i class='nav-icon la la-link'></i>
             Online Link</a></li>
 @endrole

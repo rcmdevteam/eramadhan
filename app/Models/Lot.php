@@ -19,7 +19,7 @@ class Lot extends Model
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
-    // protected $fillable = [];
+    protected $fillable = ['hari', 'sasaran', 'jumlah_lot', 'masjid_id', 'ramadhan_id', 'description', 'quota'];
     // protected $hidden = [];
     // protected $dates = [];
 
@@ -43,6 +43,10 @@ class Lot extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
+    public function transactions()
+    {
+        return $this->hasMany(Transaksi::class);
+    }
 
     /*
     |--------------------------------------------------------------------------

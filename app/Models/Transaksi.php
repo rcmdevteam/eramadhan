@@ -14,6 +14,9 @@ class Transaksi extends Model
     | GLOBAL VARIABLES
     |--------------------------------------------------------------------------
     */
+    const UNPAID = 'unpaid';
+    const PAID = 'paid';
+    const FAILED = 'failed';
 
     protected $table = 'ramadhan_transactions';
     // protected $primaryKey = 'id';
@@ -28,6 +31,20 @@ class Transaksi extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
+    public function masjid()
+    {
+        return $this->belongsTo(Masjid::class);
+    }
+
+    public function lots()
+    {
+        return $this->hasMany(Lot::class);
+    }
+
+    public function ramadhan()
+    {
+        return $this->belongsTo(Ramadhan::class);
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -52,4 +69,8 @@ class Transaksi extends Model
     | MUTATORS
     |--------------------------------------------------------------------------
     */
+    public function getHariAttribute()
+    {
+        return $this->attributes['ramadhan'];
+    }
 }

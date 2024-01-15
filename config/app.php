@@ -67,7 +67,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Kuala_Lumpur',
 
     /*
     |--------------------------------------------------------------------------
@@ -232,5 +232,13 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
     ],
+
+    'payment' => [
+        'toyyibpay' => [
+            'secret_key' => env('TOY_SKEY'),
+            'collection_id' => env('TOY_CID'),
+            'payment_type' => env('TOY_PTYPE')
+        ]
+    ]
 
 ];
