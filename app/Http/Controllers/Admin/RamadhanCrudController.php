@@ -43,7 +43,9 @@ class RamadhanCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        $this->crud->query->where('masjid_id', auth()->user()->masjids->masjid->id);
+        if (auth()->user()->hasRole('Admin')) {
+            $this->crud->query->where('masjid_id', auth()->user()->masjids->masjid->id);
+        }
 
         CRUD::column('id');
         CRUD::column('masjid_id');

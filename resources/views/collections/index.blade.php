@@ -11,14 +11,14 @@
 
 <body class="bg-zinc-100">
     <div class="w-full"
-        style="background-image: url('{!! asset('images/cover-ori.jpg') !!}'); background-size: cover; background-position: center center">
+        style="background-image: url('{!! asset($masjid->cover) !!}'); background-size: cover; background-position: center center">
         <div class="container ml-auto mr-auto h-[150px] md:h-[250px]">
         </div>
     </div>
     <div class="w-full pb-20">
         <div class="container ml-auto mr-auto">
             <div class="size-32 bg-zinc-500 ml-auto mr-auto -mt-20 md:-mt-20 rounded-lg mb-6 pb-10 z-40"
-                style="background-image: url('{!! asset('images/avatar.jpeg') !!}'); background-size: cover; background-position: center center">
+                style="background-image: url('{!! asset($masjid->photo) !!}'); background-size: cover; background-position: center center">
             </div>
             <h1 class="text-center text-2xl font-black mb-2">{{ $masjid->name }}</h1>
             <h2 class="text-center text-xl text-black-100">Tempahan {{ config('app.name') }} {{ $ramadhan->tahun }}H
@@ -30,7 +30,8 @@
                         <div class="p-4 {{ $lot->quota - $lot->transactions->where('status', 'paid')->count() == 0 ? 'bg-slate-400 cursor-not-allowed' : 'bg-white cursor-pointer lot-ramadhan' }} rounded-md hover:shadow mx-4 md:mx-0"
                             data-lotid="{{ $lot->id }}" data-hari="{{ $lot->hari }}"
                             data-jumlah="{{ $lot->jumlah_lot }}" data-ramadhan="{{ $lot->ramadhan->id }}"
-                            data-masjid="{{ $lot->masjid->id }}">
+                            data-masjid="{{ $lot->masjid->id }}" data-tarikh="1 Mac 2023 (Selasa)"
+                            data-description="{{ $lot->description }}">
                             <div class="flex flex-row">
                                 <div>
                                     <div
@@ -67,7 +68,7 @@
         <div id="close_form" class="absolute bg-white px-2 right-0 rounded-bl-md cursor-pointer">
             X
         </div>
-        <div style="background-image: url('{!! asset('images/cover-ori.jpg') !!}'); background-size: cover; background-position: center center"
+        <div style="background-image: url('{!! asset($masjid->cover) !!}'); background-size: cover; background-position: center center"
             class="rounded-t-lg">
             <div class="p-8 bg-black/50 hover:shadow">
                 <div class="flex flex-row">
@@ -76,6 +77,7 @@
                             <h5 class="text-xs">ramadhan</h5>
                             <h2 class="text-2xl">
                                 <div id="display_hari"></div>
+                                <div id="display_date" class="text-xs text-gray-500"></div>
                             </h2>
                         </div>
                     </div>
@@ -83,6 +85,7 @@
                         <h3 class="font-bold text-white text-3xl">RM <span id="display_jumlah_lot"></span>
                         </h3>
                         <p class="text-white/80">1 Lot</p>
+                        <p class="text-white/80" id="display_description"></p>
                     </div>
                 </div>
             </div>
@@ -137,10 +140,14 @@
                 var ramadhan = $(this).data("ramadhan");
                 var masjid = $(this).data("masjid");
                 var csrfToken = $('meta[name="_token"]').attr('content');
+                var tarikh = $(this).data("tarikh");
+                var description = $(this).data("description");
 
                 // Set data into the form inputs
                 $("#form_container #display_hari").html(hari);
+                $("#form_container #display_date").html(tarikh);
                 $("#form_container #display_jumlah_lot").html(jumlah);
+                $("#form_container #display_description").html(description);
 
                 $("#form_container #lotid").val(lotid);
                 $("#form_container #hari").val(hari);

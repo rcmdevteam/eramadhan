@@ -47,6 +47,7 @@ class MasjidCrudController extends CrudController
         // CRUD::column('id');
         CRUD::column('name');
         CRUD::column('location');
+        CRUD::column('short_name');
         // CRUD::column('created_at');
         // CRUD::column('updated_at');
 
