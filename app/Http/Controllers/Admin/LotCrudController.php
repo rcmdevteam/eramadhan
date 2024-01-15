@@ -71,7 +71,7 @@ class LotCrudController extends CrudController
 
         CRUD::field('hari');
         // CRUD::field('id');
-        CRUD::column('quota');
+        CRUD::field('quota');
         CRUD::field('jumlah_lot');
         CRUD::field('masjid_id');
         CRUD::field('ramadhan_id');

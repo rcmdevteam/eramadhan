@@ -85,6 +85,6 @@
 @role('Admin')
     <strong class="nav-item text-dark mt-4"><small class="ml-2 font-weight-bold">Link</small></strong>
     <li class='nav-item'><a target="_blank" class='nav-link'
-            href='{{ url('/p/' . auth()->user()->masjids->masjid->name) }}'><i class='nav-icon la la-link'></i>
+            href='{{ url(auth()->user()->masjids->masjid->short_name) }}'><i class='nav-icon la la-link'></i>
             Online Link</a></li>
 @endrole

@@ -70,14 +70,26 @@ class MasjidCrudController extends CrudController
         CRUD::field('name');
         CRUD::field('short_name');
         CRUD::field('location');
-        // CRUD::field('toyyibpay_secret_key');
-        // CRUD::field('toyyibpay_collection_id');
 
-        /**
-         * Fields can be defined using the fluent syntax or array syntax:
-         * - CRUD::field('price')->type('number');
-         * - CRUD::addField(['name' => 'price', 'type' => 'number'])); 
-         */
+        if ($this->crud->getActionMethod() == 'edit' || $this->crud->getActionMethod() == 'update') {
+            CRUD::addField(
+                [
+                    'name'      => 'photo',
+                    'label'     => 'Photo',
+                    'type'      => 'upload',
+                    'upload'    => true,
+                ]
+            );
+
+            CRUD::addField(
+                [
+                    'name'      => 'cover',
+                    'label'     => 'Cover',
+                    'type'      => 'upload',
+                    'upload'    => true,
+                ]
+            );
+        }
     }
 
     protected function store()

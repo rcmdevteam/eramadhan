@@ -19,9 +19,13 @@ class Masjid extends Model
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
-    protected $fillable = ['name', 'location', 'toyyibpay_secret_key', 'toyyibpay_collection_id', 'option_toyyibpay_type', 'short_name'];
+    protected $fillable = ['name', 'location', 'toyyibpay_secret_key', 'toyyibpay_collection_id', 'option_toyyibpay_type', 'short_name', 'photo', 'cover'];
     // protected $hidden = [];
     // protected $dates = [];
+    // protected $casts = [
+    //     'photo' => 'array',
+    //     'cover' => 'array'
+    // ];
 
     /*
     |--------------------------------------------------------------------------
@@ -56,4 +60,21 @@ class Masjid extends Model
     | MUTATORS
     |--------------------------------------------------------------------------
     */
+    public function setCoverAttribute($value)
+    {
+        $attribute_name = "cover";
+        $disk = "public";
+        $destination_path = "masjids";
+
+        $this->uploadFileToDisk($value, $attribute_name, $disk, $destination_path);
+    }
+
+    public function setPhotoAttribute($value)
+    {
+        $attribute_name = "photo";
+        $disk = "public";
+        $destination_path = "masjids";
+
+        $this->uploadFileToDisk($value, $attribute_name, $disk, $destination_path);
+    }
 }

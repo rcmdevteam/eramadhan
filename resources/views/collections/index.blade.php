@@ -27,13 +27,14 @@
                 <div class="flex flex-col gap-4 text-center w-[450px] ml-auto mr-auto">
                     <h2 class="uppercase text-sm font-bold">Pilih Lot</h2>
                     @foreach ($lots as $lot)
-                        <div class="p-4 {{ $lot->quota - $lot->transactions->where('status', 'paid')->count() == 0 ? 'bg-slate-400' : 'bg-white' }} rounded-md hover:shadow mx-4 md:mx-0 lot-ramadhan cursor-pointer"
+                        <div class="p-4 {{ $lot->quota - $lot->transactions->where('status', 'paid')->count() == 0 ? 'bg-slate-400 cursor-not-allowed' : 'bg-white cursor-pointer lot-ramadhan' }} rounded-md hover:shadow mx-4 md:mx-0"
                             data-lotid="{{ $lot->id }}" data-hari="{{ $lot->hari }}"
                             data-jumlah="{{ $lot->jumlah_lot }}" data-ramadhan="{{ $lot->ramadhan->id }}"
                             data-masjid="{{ $lot->masjid->id }}">
                             <div class="flex flex-row">
                                 <div>
-                                    <div class="p-2 rounded-md bg-zinc-100">
+                                    <div
+                                        class="p-2 rounded-md {{ $lot->quota - $lot->transactions->where('status', 'paid')->count() == 0 ? 'bg-slate-400' : 'bg-zinc-100' }}">
                                         <h5 class="text-xs">ramadhan</h5>
                                         <h2 class="text-2xl">{{ $lot->hari }}</h2>
                                         <p class="text-xs text-gray-500">1 Mac 2023 (Selasa)</p>
@@ -43,7 +44,7 @@
                                     <h3 class="font-bold">RM {{ $lot->jumlah_lot }} / lot</h3>
                                     <p class="text-sm text-gray-500">Jumlah Tajaan: RM {{ $lot->sasaran }}</p>
                                     <p class="text-sm text-gray-500">Lot Kosong: <span
-                                            class="text-red-600 font-bold">{{ $lot->quota - $lot->transactions->where('status', 'paid')->count() }}/{{ $lot->quota }}</span>
+                                            class="{{ $lot->quota - $lot->transactions->where('status', 'paid')->count() == 0 ? '' : 'text-red-600 font-bold' }}">{{ $lot->quota - $lot->transactions->where('status', 'paid')->count() }}/{{ $lot->quota }}</span>
                                     </p>
                                     <p class="text-sm text-gray-500">{{ $lot->description }}</p>
                                 </div>
@@ -137,10 +138,6 @@
                 var masjid = $(this).data("masjid");
                 var csrfToken = $('meta[name="_token"]').attr('content');
 
-                // return console.log('lotid:' + lotid + ' hari:' + hari + ' jumlah:' + jumlah + ' ramadhan:' +
-                //     ramadhan +
-                //     ' masjid:' + masjid);
-
                 // Set data into the form inputs
                 $("#form_container #display_hari").html(hari);
                 $("#form_container #display_jumlah_lot").html(jumlah);
@@ -171,9 +168,6 @@
             });
 
             $("#submitBtn").on("click", function() {
-                // Handle form submission logic here
-
-                // After submission, hide the form
                 $("#form_container").removeClass("visible").addClass("invisible");
             });
         });
