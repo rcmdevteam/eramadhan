@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\TransaksiExport;
 use Backpack\PageManager\app\Models\Page;
 use App\Http\Controllers\Controller;
 use App\Models\Transaksi;
+use Maatwebsite\Excel\Facades\Excel;
 
 class DashboardController extends Controller
 {
@@ -19,5 +21,10 @@ class DashboardController extends Controller
         $totalCollection = Transaksi::whereStatus('paid')->whereMasjidId(auth()->user()->masjids->masjid->id)->sum('jumlah');
 
         return view('vendor.backpack.ui.dashboard', compact('totaltansaksi', 'totalCollection'));
+    }
+
+    public function exportTransaksi()
+    {
+        return Excel::download(new TransaksiExport, 'transaksi.xlsx');
     }
 }

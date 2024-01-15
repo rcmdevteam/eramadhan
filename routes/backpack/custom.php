@@ -18,6 +18,7 @@ Route::group([
     'namespace'  => 'App\Http\Controllers\Admin',
 ], function () { // custom admin routes
     Route::get('dashboard', 'DashboardController@index');
+    Route::get('export', 'DashboardController@exportTransaksi');
     Route::crud('user', 'UsersCrudController');
     // Route::crud('profiles', 'ProfilesCrudController');
     // Route::crud('categories', 'CategoriesCrudController');
