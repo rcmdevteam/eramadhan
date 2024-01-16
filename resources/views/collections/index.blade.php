@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ $masjid->name }} :: {{ config('app.name') }}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
     <meta name="_token" content="{{ csrf_token() }}">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -87,7 +87,7 @@
                                 <div>
                                     <div
                                         class="p-2 rounded-md {{ $lot->quota - $lot->transactions->where('status', 'paid')->count() == 0 ? 'bg-slate-400' : 'bg-zinc-100' }} w-[100px] h-[96px]">
-                                        <h5 class="text-xs upp">ramadhan</h5>
+                                        <h5 class="text-xs upp">Ramadhan</h5>
                                         <h2 class="text-2xl font-bold">{{ $lot->hari }}</h2>
                                         <p class="text-xs text-gray-500">
                                             @if ($lot->hari != 30)
@@ -130,7 +130,7 @@
                 <div class="flex flex-row">
                     <div class="text-center">
                         <div class="p-2 rounded-md bg-white w-[100px] h-[96px]">
-                            <h5 class="text-xs">ramadhan</h5>
+                            <h5 class="text-xs">Ramadhan</h5>
                             <h2>
                                 <div id="display_hari" class="font-bold text-2xl"></div>
                                 <div id="display_date" class="text-xs text-gray-500"></div>
@@ -176,7 +176,7 @@
                 <button type="submit"
                     class="bg-black text-white/90 font-bold uppercase p-4 text-sm rounded-md mt-2 mb-2">bayar
                     lot</button>
-                <p class="text-sm text-gray-400">&copy; eRamadhan &middot; Bukti pembayaran akan di dihantar ke
+                <p class="text-sm text-gray-400">&copy; eRamadhan &middot; Bukti pembayaran akan di hantar ke
                     akaun
                     emel anda.</p>
                 @csrf

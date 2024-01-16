@@ -104,8 +104,10 @@ Route::prefix('{masjid}')->middleware(['checking'])->group(function () {
         $validatedData = request()->validate([
             'nama' => 'required|string|max:255',
             'email' => 'required|email|max:255',
-            'phone' => ['required', 'string', new StartsSix, 'min:10'],
+            'phone' => ['required', 'string', new StartsSix, 'min:5'],
             // Add more validation rules as needed
+        ], [
+            'phone.required' => 'Nombor telefon diperlukan'
         ]);
 
         $masjid = Masjid::where('short_name', $masjid)->firstOrFail();
