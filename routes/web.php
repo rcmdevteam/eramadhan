@@ -151,7 +151,7 @@ Route::prefix('{masjid}')->middleware(['checking'])->group(function () {
                 'billPayorInfo'           => 1, // fix toyyibpay covid
                 'billAmount'              => $amountToPay['amount'],
                 'billReturnUrl'           => \URL::previous(),
-                'billCallbackUrl'         => 'https://2055-180-74-66-131.ngrok-free.app' . '/payment/toyyibpay/callback',
+                'billCallbackUrl'         => config('app.url') . '/payment/toyyibpay/callback',
                 'billExternalReferenceNo' => $masjid . '&' . $transaction->id, // StoreID & OrderId
                 'billTo'                  => $name,
                 'billEmail'               => $email,

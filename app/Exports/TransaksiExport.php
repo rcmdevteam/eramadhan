@@ -11,7 +11,7 @@ class TransaksiExport implements FromView
     public function view(): View
     {
         return view('exports.transaksi', [
-            'transaksi' => Transaksi::whereStatus('paid')->whereMasjidId(auth()->user()->masjids->masjid->id)->all()
+            'transaksi' => Transaksi::whereStatus('paid')->whereMasjidId(auth()->user()->masjids->masjid->id)->get()
         ]);
     }
 }

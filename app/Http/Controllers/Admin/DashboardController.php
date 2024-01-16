@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Exports\TransaksiExport;
-use Backpack\PageManager\app\Models\Page;
 use App\Http\Controllers\Controller;
 use App\Models\Transaksi;
 use Maatwebsite\Excel\Facades\Excel;
