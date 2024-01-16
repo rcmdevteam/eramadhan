@@ -11,14 +11,14 @@
 
 <body class="bg-zinc-100">
     <div class="w-full"
-        style="background-image: url('{!! asset($masjid->cover) !!}'); background-size: cover; background-position: center center">
+        style="background-image: url('{!! Storage::url($masjid->cover) !!}'); background-size: cover; background-position: center center">
         <div class="container ml-auto mr-auto h-[150px] md:h-[250px]">
         </div>
     </div>
     <div class="w-full pb-20">
         <div class="container ml-auto mr-auto">
             <div class="size-32 bg-zinc-500 ml-auto mr-auto -mt-20 md:-mt-20 rounded-lg mb-6 pb-10 z-40"
-                style="background-image: url('{!! asset($masjid->photo) !!}'); background-size: cover; background-position: center center">
+                style="background-image: url('{!! Storage::url($masjid->photo) !!}'); background-size: cover; background-position: center center">
             </div>
             <h1 class="text-center text-2xl font-black mb-2">{{ $masjid->name }}</h1>
             <h2 class="text-center text-xl text-black-100">Tempahan {{ config('app.name') }} {{ $ramadhan->tahun }}H
@@ -35,10 +35,45 @@
                             <div class="flex flex-row">
                                 <div>
                                     <div
-                                        class="p-2 rounded-md {{ $lot->quota - $lot->transactions->where('status', 'paid')->count() == 0 ? 'bg-slate-400' : 'bg-zinc-100' }}">
-                                        <h5 class="text-xs">ramadhan</h5>
-                                        <h2 class="text-2xl">{{ $lot->hari }}</h2>
-                                        <p class="text-xs text-gray-500">1 Mac 2023 (Selasa)</p>
+                                        class="p-2 rounded-md {{ $lot->quota - $lot->transactions->where('status', 'paid')->count() == 0 ? 'bg-slate-400' : 'bg-zinc-100' }} w-[100px] h-[96px]">
+                                        <h5 class="text-xs upp">ramadhan</h5>
+                                        <h2 class="text-2xl font-bold">{{ $lot->hari }}</h2>
+                                        <p class="text-xs text-gray-500">
+                                            @php
+                                                $date = json_decode(App\Models\Calendar::where('year', \Carbon\Carbon::now()->year)->first()->data)->prayerTime;
+
+                                                foreach ($date as $item) {
+                                                    if (isset($item->hijri) && $item->hijri === '1445-09-' . ($lot->hari < 10 ? '0' . $lot->hari : $lot->hari)) {
+                                                        echo $item->date;
+                                                        switch ($item->day) {
+                                                            case 'Monday':
+                                                                $day = 'Isnin';
+                                                                break;
+                                                            case 'Tuesday':
+                                                                $day = 'Selasa';
+                                                                break;
+                                                            case 'Wednesday':
+                                                                $day = 'Rabu';
+                                                                break;
+                                                            case 'Thursday':
+                                                                $day = 'Khamis';
+                                                                break;
+                                                            case 'Friday':
+                                                                $day = 'Jumaat';
+                                                                break;
+                                                            case 'Saturday':
+                                                                $day = 'Sabtu';
+                                                                break;
+                                                            case 'Sunday':
+                                                                $day = 'Ahad';
+                                                                break;
+                                                        }
+                                                        echo '<br>(' . $day . ')';
+                                                        break; // Assuming there's only one match, you can remove break if there could be multiple matches
+                                                    }
+                                                }
+                                            @endphp
+                                        </p>
                                     </div>
                                 </div>
                                 <div class="text-right flex flex-col items-right w-full pt-1">
@@ -68,7 +103,7 @@
         <div id="close_form" class="absolute bg-white px-2 right-0 rounded-bl-md cursor-pointer">
             X
         </div>
-        <div style="background-image: url('{!! asset($masjid->cover) !!}'); background-size: cover; background-position: center center"
+        <div style="background-image: url('{!! Storage::url($masjid->cover) !!}'); background-size: cover; background-position: center center"
             class="rounded-t-lg">
             <div class="p-8 bg-black/50 hover:shadow">
                 <div class="flex flex-row">
