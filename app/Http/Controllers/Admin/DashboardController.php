@@ -24,6 +24,6 @@ class DashboardController extends Controller
 
     public function exportTransaksi()
     {
-        return Excel::download(new TransaksiExport, 'transaksi.xlsx');
+        return Excel::download(new TransaksiExport, now() . '-transaksi-' . auth()->user()->masjids->masjid->name . '.xlsx');
     }
 }

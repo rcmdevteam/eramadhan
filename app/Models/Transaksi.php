@@ -41,6 +41,11 @@ class Transaksi extends Model
         return $this->hasMany(Lot::class);
     }
 
+    public function lot()
+    {
+        return $this->belongsTo(Lot::class);
+    }
+
     public function ramadhan()
     {
         return $this->belongsTo(Ramadhan::class);

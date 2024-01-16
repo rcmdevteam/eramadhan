@@ -16,7 +16,7 @@
             <div class="col-md-6">
                 <!-- Balance of amount sponsors -->
                 <h2 class="font-weight-bold text-dark float-right">RM {{ number_format($totalCollection, 2) }}</h2>
-                <p class="text-muted float-right mb-2">Terkini 1 minutes ago</p>
+                <p class="text-muted float-right mb-2">Terkini {{ \Carbon\Carbon::now()->format('d-M-Y H:i:s A') }}</p>
                 <p class="mt-0 mb-0 float-right"><a href="{{ backpack_url('/export') }}"><i class="las la-download"></i>
                         Muat Turun Rekod</a>
                 </p>
