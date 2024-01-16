@@ -39,6 +39,11 @@ class MasjidUser extends Model
         return $this->belongsToMany(User::class);
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function masjid()
     {
         return $this->belongsTo(Masjid::class);
@@ -61,4 +66,8 @@ class MasjidUser extends Model
     | MUTATORS
     |--------------------------------------------------------------------------
     */
+    public function getAdminAttribute()
+    {
+        return $this->attributes['user_id'];
+    }
 }

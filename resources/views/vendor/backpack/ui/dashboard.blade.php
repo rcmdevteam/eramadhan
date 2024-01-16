@@ -11,7 +11,9 @@
             @include('vendor.backpack.ui.cards.welcome')
         </div>
         <div class="col-md-6 mb-4">
-            @include('vendor.backpack.ui.cards.total_collection')
+            @if (auth()->user()->hasRole('Admin'))
+                @include('vendor.backpack.ui.cards.total_collection')
+            @endif
         </div>
     </div>
 @endsection

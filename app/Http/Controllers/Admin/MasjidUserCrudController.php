@@ -39,7 +39,9 @@ class MasjidUserCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        
+        CRUD::column('id');
+        CRUD::column('user');
+        CRUD::column('masjid');
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -58,7 +60,7 @@ class MasjidUserCrudController extends CrudController
     {
         CRUD::setValidation(MasjidUserRequest::class);
 
-        
+
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:

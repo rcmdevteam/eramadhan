@@ -27,10 +27,46 @@
                 <div class="flex flex-col gap-4 text-center w-[450px] ml-auto mr-auto">
                     <h2 class="uppercase text-sm font-bold">Pilih Lot</h2>
                     @foreach ($lots as $lot)
+                        @php
+                            $date = json_decode(App\Models\Calendar::where('year', \Carbon\Carbon::now()->year)->first()->data)->prayerTime;
+
+                            foreach ($date as $item) {
+                                if (isset($item->hijri) && $item->hijri === '1445-09-' . ($lot->hari < 10 ? '0' . $lot->hari : $lot->hari)) {
+                                    $dateApi = $item->date;
+                                    switch ($item->day) {
+                                        case 'Monday':
+                                            $day = 'Isnin';
+                                            break;
+                                        case 'Tuesday':
+                                            $day = 'Selasa';
+                                            break;
+                                        case 'Wednesday':
+                                            $day = 'Rabu';
+                                            break;
+                                        case 'Thursday':
+                                            $day = 'Khamis';
+                                            break;
+                                        case 'Friday':
+                                            $day = 'Jumaat';
+                                            break;
+                                        case 'Saturday':
+                                            $day = 'Sabtu';
+                                            break;
+                                        case 'Sunday':
+                                            $day = 'Ahad';
+                                            break;
+                                    }
+                                    $dateDay = $day;
+                                    break; // Assuming there's only one match, you can remove break if there could be multiple matches
+                                }
+                            }
+                        @endphp
+
                         <div class="p-4 {{ $lot->quota - $lot->transactions->where('status', 'paid')->count() == 0 ? 'bg-slate-400 cursor-not-allowed' : 'bg-white cursor-pointer lot-ramadhan' }} rounded-md hover:shadow mx-4 md:mx-0"
                             data-lotid="{{ $lot->id }}" data-hari="{{ $lot->hari }}"
                             data-jumlah="{{ $lot->jumlah_lot }}" data-ramadhan="{{ $lot->ramadhan->id }}"
-                            data-masjid="{{ $lot->masjid->id }}" data-tarikh="1 Mac 2023 (Selasa)"
+                            data-masjid="{{ $lot->masjid->id }}"
+                            data-tarikh="{{ $dateApi }} ({{ $dateDay }})"
                             data-description="{{ $lot->description }}">
                             <div class="flex flex-row">
                                 <div>
@@ -39,40 +75,8 @@
                                         <h5 class="text-xs upp">ramadhan</h5>
                                         <h2 class="text-2xl font-bold">{{ $lot->hari }}</h2>
                                         <p class="text-xs text-gray-500">
-                                            @php
-                                                $date = json_decode(App\Models\Calendar::where('year', \Carbon\Carbon::now()->year)->first()->data)->prayerTime;
-
-                                                foreach ($date as $item) {
-                                                    if (isset($item->hijri) && $item->hijri === '1445-09-' . ($lot->hari < 10 ? '0' . $lot->hari : $lot->hari)) {
-                                                        echo $item->date;
-                                                        switch ($item->day) {
-                                                            case 'Monday':
-                                                                $day = 'Isnin';
-                                                                break;
-                                                            case 'Tuesday':
-                                                                $day = 'Selasa';
-                                                                break;
-                                                            case 'Wednesday':
-                                                                $day = 'Rabu';
-                                                                break;
-                                                            case 'Thursday':
-                                                                $day = 'Khamis';
-                                                                break;
-                                                            case 'Friday':
-                                                                $day = 'Jumaat';
-                                                                break;
-                                                            case 'Saturday':
-                                                                $day = 'Sabtu';
-                                                                break;
-                                                            case 'Sunday':
-                                                                $day = 'Ahad';
-                                                                break;
-                                                        }
-                                                        echo '<br>(' . $day . ')';
-                                                        break; // Assuming there's only one match, you can remove break if there could be multiple matches
-                                                    }
-                                                }
-                                            @endphp
+                                            {{ $dateApi }} <br>
+                                            ({{ $dateDay }})
                                         </p>
                                     </div>
                                 </div>
@@ -108,10 +112,10 @@
             <div class="p-8 bg-black/50 hover:shadow">
                 <div class="flex flex-row">
                     <div class="text-center">
-                        <div class="p-2 rounded-md bg-white">
+                        <div class="p-2 rounded-md bg-white w-[100px] h-[96px]">
                             <h5 class="text-xs">ramadhan</h5>
-                            <h2 class="text-2xl">
-                                <div id="display_hari"></div>
+                            <h2>
+                                <div id="display_hari" class="font-bold text-2xl"></div>
                                 <div id="display_date" class="text-xs text-gray-500"></div>
                             </h2>
                         </div>

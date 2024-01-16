@@ -12,12 +12,22 @@ class DashboardController extends Controller
     public function index()
     {
         if (!auth()->user()->hasRole('Admin')) {
-            return redirect(backpack_url('masjid/create'));
+            if (!auth()->user()->hasRole('Superadmin')) {
+                return redirect(backpack_url('masjid/create'));
+            }
         }
 
-        $totaltansaksi = Transaksi::whereStatus('paid')->whereMasjidId(auth()->user()->masjids->masjid->id)->take(3)->get();
+        // Admin
+        if (auth()->user()->hasRole('Admin')) {
+            $totaltansaksi = Transaksi::whereStatus('paid')->whereMasjidId(auth()->user()->masjids->masjid->id)->take(3)->get();
+            $totalCollection = Transaksi::whereStatus('paid')->whereMasjidId(auth()->user()->masjids->masjid->id)->sum('jumlah');
+        }
 
-        $totalCollection = Transaksi::whereStatus('paid')->whereMasjidId(auth()->user()->masjids->masjid->id)->sum('jumlah');
+        // Superadmin
+        if (auth()->user()->hasRole('Superadmin')) {
+            $totaltansaksi = null;
+            $totalCollection = null;
+        }
 
         return view('vendor.backpack.ui.dashboard', compact('totaltansaksi', 'totalCollection'));
     }

@@ -45,14 +45,15 @@
     <li class="nav-item d-none"><a class="nav-link" href="{{ backpack_url('dashboard') }}"><i
                 class="la la-home nav-icon"></i>
             {{ trans('backpack::base.dashboard') }}</a></li>
-    <strong class="nav-item text-dark mt-2"><small class="ml-2 font-weight-bold">SUPERADMIN</small></strong>
-    <li class='nav-item'><a class='nav-link' href='{{ backpack_url('masjid') }}'><i class='nav-icon la la-question'></i>
+    <strong class="nav-item text-dark mt-4"><small class="ml-2 font-weight-bold">SUPERADMIN</small></strong>
+    <li class='nav-item'><a class='nav-link' href='{{ backpack_url('masjid') }}'><i class='nav-icon la la-mosque'></i>
             Masjid</a></li>
     <li class='nav-item'><a class='nav-link' href='{{ backpack_url('masjid-user') }}'><i
-                class='nav-icon la la-question'></i> Masjid users</a></li>
-    <li class='nav-item'><a class='nav-link' href='{{ backpack_url('ramadhan') }}'><i class='nav-icon la la-question'></i>
+                class='nav-icon la la-user-friends'></i> Masjid Users</a></li>
+    <li class='nav-item'><a class='nav-link' href='{{ backpack_url('ramadhan') }}'><i
+                class='nav-icon la la-star-and-crescent'></i>
             Ramadhans</a></li>
-    <li class='nav-item'><a class='nav-link' href='{{ backpack_url('transaksi') }}'><i class='nav-icon la la-question'></i>
+    <li class='nav-item'><a class='nav-link' href='{{ backpack_url('transaksi') }}'><i class='nav-icon la la-coins'></i>
             Transaksi</a></li>
     <li class='nav-item d-none'><a class='nav-link' href='{{ backpack_url('categories') }}'><i
                 class='nav-icon la la-box'></i>

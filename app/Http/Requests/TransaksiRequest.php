@@ -25,7 +25,9 @@ class TransaksiRequest extends FormRequest
     public function rules()
     {
         return [
-            // 'name' => 'required|min:5|max:255'
+            'nama' => 'required|min:5|max:255',
+            'emel' => 'required|min:2|max:255|email',
+            'telefon' => 'required|min:2|max:255|email'
         ];
     }
 
