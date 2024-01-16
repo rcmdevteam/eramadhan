@@ -21,7 +21,7 @@
                 style="background-image: url('{!! Storage::url($masjid->photo) !!}'); background-size: cover; background-position: center center">
             </div>
             <h1 class="text-center text-2xl font-black mb-2">{{ $masjid->name }}</h1>
-            <h2 class="text-center text-xl text-black-100">Tempahan {{ config('app.name') }} {{ $ramadhan->tahun }}H
+            <h2 class="text-center text-xl text-slate-600">Tempahan {{ config('app.name') }} {{ $ramadhan->tahun }}H
             </h2>
             <div class="py-10">
                 <div class="flex flex-col gap-4 text-center w-[450px] ml-auto mr-auto">
@@ -135,17 +135,17 @@
                     Nama
                 </label>
                 <input type="text" name="nama" id="nama" class="border p-1 rounded mb-4 px-1.5" required
-                    value="">
+                    value="" placeholder="Nama">
                 <label for="email" class="flex text-left mb-2 text-sm text-gray-900">
                     Email
                 </label>
                 <input type="text" name="email" id="email" class="border p-1 rounded mb-4 px-1.5" required
-                    value="">
+                    value="" placeholder="Emel">
                 <label for="phone" class="flex text-left mb-2 text-sm text-gray-900">
                     Telefon No
                 </label>
                 <input type="text" name="phone" id="phone" class="border p-1 rounded mb-4 px-1.5" required
-                    value="">
+                    value="60" placeholder="Telefon, contoh 60">
                 <input type="hidden" name="jumlah" id="jumlah" class="border p-1 rounded mb-4 px-1.5" required
                     value="">
                 <input type="hidden" name="hari" id="hari" class="border p-1 rounded mb-4 px-1.5" required
