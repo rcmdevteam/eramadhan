@@ -125,11 +125,11 @@ Route::prefix('{masjid}')->middleware(['checking'])->group(function () {
         $name = $validatedData['nama'];
         $email = $validatedData['email'];
         $phone = $validatedData['phone'];
-        $jumlah = $validatedData['jumlah'];
-        $hari = $validatedData['hari'];
-        $lotid = $validatedData['lotid'];
-        $masjid = $validatedData['masjid'];
-        $ramadhan = $validatedData['ramadhan'];
+        $jumlah = request()->jumlah;
+        $hari = request()->hari;
+        $lotid = request()->lotid;
+        $masjid = request()->masjid;
+        $ramadhan = request()->ramadhan;
 
 
 

@@ -21,7 +21,7 @@
     </div>
     <div class="w-full pb-20">
         <div class="container ml-auto mr-auto">
-            <div class="size-32 bg-zinc-500 ml-auto mr-auto -mt-20 md:-mt-20 rounded-lg mb-6 pb-10 z-40"
+            <div class="size-32 bg-zinc-500 ml-auto mr-auto -mt-20 md:-mt-20 rounded-lg mb-6 pb-10 z-40 border border-white border-4 shadow"
                 style="background-image: url('{!! Storage::url($masjid->photo) !!}'); background-size: cover; background-position: center center">
             </div>
             <h1 class="text-center text-2xl font-black mb-2">{{ $masjid->name }}</h1>
@@ -77,7 +77,7 @@
                             }
                         @endphp
 
-                        <div class="p-4 {{ $lot->quota - $lot->transactions->where('status', 'paid')->count() == 0 ? 'bg-slate-400 cursor-not-allowed' : 'bg-white cursor-pointer lot-ramadhan' }} rounded-md hover:shadow mx-4 md:mx-0"
+                        <div class="p-4 {{ $lot->quota - $lot->transactions->where('status', 'paid')->count() == 0 ? 'bg-slate-400 cursor-not-allowed' : 'bg-white cursor-pointer lot-ramadhan' }} rounded-md hover:shadow-md mx-4 md:mx-0 {{ $lot->hari == '30' ? 'invisible' : 'visible' }}"
                             data-lotid="{{ $lot->id }}" data-hari="{{ $lot->hari }}"
                             data-jumlah="{{ $lot->jumlah_lot }}" data-ramadhan="{{ $lot->ramadhan->id }}"
                             data-masjid="{{ $lot->masjid->id }}"
