@@ -4,6 +4,7 @@ use App\Models\Lot;
 use App\Models\Masjid;
 use App\Models\Ramadhan;
 use App\Models\RamadhanTransaction;
+use App\Rules\StartsSix;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -99,17 +100,36 @@ Route::prefix('{masjid}')->middleware(['checking'])->group(function () {
 
     Route::post('/payment', function ($masjid) {
 
+        // Validate the incoming request data
+        $validatedData = request()->validate([
+            'nama' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => ['required', 'string', new StartsSix, 'min:10'],
+            // Add more validation rules as needed
+        ]);
+
         $masjid = Masjid::where('short_name', $masjid)->firstOrFail();
         $masjidname = $masjid->name;
 
-        $name = request()->nama;
-        $email = request()->email;
-        $phone = request()->phone;
-        $jumlah = request()->jumlah;
-        $hari = request()->hari;
-        $lotid = request()->lotid;
-        $masjid = request()->masjid;
-        $ramadhan = request()->ramadhan;
+        // $name = request()->nama;
+        // $email = request()->email;
+        // $phone = request()->phone;
+        // $jumlah = request()->jumlah;
+        // $hari = request()->hari;
+        // $lotid = request()->lotid;
+        // $masjid = request()->masjid;
+        // $ramadhan = request()->ramadhan;
+
+        $name = $validatedData['nama'];
+        $email = $validatedData['email'];
+        $phone = $validatedData['phone'];
+        $jumlah = $validatedData['jumlah'];
+        $hari = $validatedData['hari'];
+        $lotid = $validatedData['lotid'];
+        $masjid = $validatedData['masjid'];
+        $ramadhan = $validatedData['ramadhan'];
+
+
 
         // perform insert transaction
         $transaction = new RamadhanTransaction();

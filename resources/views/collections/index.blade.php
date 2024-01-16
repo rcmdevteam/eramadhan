@@ -29,6 +29,17 @@
             </h2>
             <div class="py-10">
                 <div class="flex flex-col gap-4 text-center w-[450px] ml-auto mr-auto">
+
+                    @if ($errors->any())
+                        <div class="bg-red-100 text-red-700 p-2 rounded border border-red-700 text-left px-4 mb-4">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
                     <h2 class="uppercase text-sm font-bold">Pilih Lot</h2>
                     @foreach ($lots as $lot)
                         @php
