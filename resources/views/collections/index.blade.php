@@ -57,7 +57,12 @@
                                     ->whereStatus('unpaid')
                                     ->exists()
                             ) {
-                                $updatePayment = App\Models\RamadhanTransaction::whereId($transactionId)->update(['status' => 'paid', 'mark_as_paid' => \Carbon\Carbon::now()]);
+                                $updatePayment = App\Models\RamadhanTransaction::whereId($transactionId)->update([
+                                    'status' => 'paid',
+                                    'toyyibpay_billcode' => request()->billcode,
+                                    'toyyibpay_refno' => request()->transaction_id,
+                                    'mark_as_paid' => \Carbon\Carbon::now(),
+                                ]);
                             }
 
                             $transaction = App\Models\RamadhanTransaction::whereId($transactionId)
@@ -81,7 +86,7 @@
                                             <td>Keterangan</td>
                                             <td class="px-4">:</td>
                                             <td class="">{{ $transaction->ramadhan }} Ramadhan - 1 Lot RM
-                                                {{ number_format($transaction->lot->jumlah_lot, 2) }}</td>
+                                                {{ App\Models\Lot::find($transaction->id)->jumlah_lot }}</td>
                                         </tr>
                                         <tr>
                                             <td>BillCode</td>
