@@ -43,11 +43,14 @@
                     @if (request('billcode') && request('transaction_id') && request('status_id') == 1)
 
                         @php
-                            $transactionReferenceNo = request()->input('order_id');
-                            $checkReference = explode('&', $transactionReferenceNo);
+                            $data = request()->all();
 
-                            $masjidId = $checkReference[0];
-                            $transactionId = $checkReference[1];
+                            $order_id_key = array_search('order_id', array_keys($data));
+
+                            if ($order_id_key !== false && isset(array_keys($data)[$order_id_key + 1])) {
+                                $next_key = array_keys($data)[$order_id_key + 1];
+                                $transactionId = $next_key;
+                            }
 
                             $transaction = App\Models\RamadhanTransaction::whereId($transactionId)
                                 ->whereStatus('paid')
