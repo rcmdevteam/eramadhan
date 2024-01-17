@@ -70,7 +70,7 @@ class RamadhanCrudController extends CrudController
     {
         CRUD::setValidation(RamadhanRequest::class);
 
-        CRUD::field('masjid_id');
+        CRUD::field('masjid_id')->default(auth()->user()->masjids->masjid->id);
         CRUD::field('tahun');
 
 
