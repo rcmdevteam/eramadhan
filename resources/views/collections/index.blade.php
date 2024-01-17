@@ -52,6 +52,14 @@
                                 $transactionId = $next_key;
                             }
 
+                            if (
+                                App\Models\RamadhanTransaction::whereId($transactionId)
+                                    ->wherStatus('unpaid')
+                                    ->exists()
+                            ) {
+                                $updatePayment = App\Models\RamadhanTransaction::whereId($transactionId)->update(['status' => 'paid', 'mark_as_paid' => \Carbon\Carbon::now()]);
+                            }
+
                             $transaction = App\Models\RamadhanTransaction::whereId($transactionId)
                                 ->whereStatus('paid')
                                 ->firstOrFail();
