@@ -43,7 +43,7 @@
                     @if (request('billcode') && request('transaction_id') && request('status_id') == 1)
 
                         @php
-                            $transactionReferenceNo = $request->input('order_id');
+                            $transactionReferenceNo = request()->input('order_id');
                             $checkReference = explode('&', $transactionReferenceNo);
 
                             $masjidId = $checkReference[0];
