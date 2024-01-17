@@ -72,7 +72,8 @@
                                         <tr>
                                             <td>Keterangan</td>
                                             <td class="px-4">:</td>
-                                            <td class="">{{ $transaction->nama }}</td>
+                                            <td class="">{{ $transaction->ramadhan }} Ramadhan - 1 Lot RM
+                                                {{ number_format($transaction->lot->jumlah_lot, 2) }}</td>
                                         </tr>
                                         <tr>
                                             <td>BillCode</td>
