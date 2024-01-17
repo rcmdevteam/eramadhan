@@ -11,10 +11,8 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        if (!auth()->user()->hasRole('Admin')) {
-            if (!auth()->user()->hasRole('Superadmin')) {
-                return redirect(backpack_url('masjid/create'));
-            }
+        if (!auth()->user()->hasRole('Admin') && !auth()->user()->hasRole('Superadmin')) {
+            return redirect(backpack_url('masjid/create'));
         }
 
         // Admin

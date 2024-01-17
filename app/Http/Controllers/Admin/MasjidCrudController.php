@@ -104,7 +104,8 @@ class MasjidCrudController extends CrudController
             // If not, create a masjid_user record
             $masjid = Masjid::create([
                 'name' => request()->name,
-                'location' => request()->location
+                'location' => request()->location,
+                'short_name' => request()->short_name
             ]);
 
             MasjidUser::create([

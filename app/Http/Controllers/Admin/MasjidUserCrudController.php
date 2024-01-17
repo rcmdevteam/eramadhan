@@ -60,7 +60,8 @@ class MasjidUserCrudController extends CrudController
     {
         CRUD::setValidation(MasjidUserRequest::class);
 
-
+        CRUD::field('users');
+        CRUD::field('masjid');
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:

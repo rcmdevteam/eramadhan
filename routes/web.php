@@ -51,6 +51,7 @@ Route::any('/payment/toyyibpay/callback', function (Request $request) {
         $transactionUpdate->mark_as_paid       = \Carbon\Carbon::now();
         $transactionUpdate->toyyibpay_refno    = request('refno');
         $transactionUpdate->toyyibpay_billcode = request('billcode');
+        $transactionUpdate->toyyibpay_ref = request('transaction_id');
         $transactionUpdate->save();
 
         $message = 'Payment was successful.';

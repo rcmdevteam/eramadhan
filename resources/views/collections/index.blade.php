@@ -40,74 +40,121 @@
                         </div>
                     @endif
 
-                    <h2 class="uppercase text-sm font-bold">Pilih Lot</h2>
-                    @foreach ($lots as $lot)
+                    @if (request('billcode') && request('transaction_id') && request('status_id') == 1)
+
                         @php
-                            $date = json_decode(App\Models\Calendar::where('year', \Carbon\Carbon::now()->year)->first()->data)->prayerTime;
-
-                            foreach ($date as $item) {
-                                if (isset($item->hijri) && $item->hijri === '1445-09-' . ($lot->hari < 10 ? '0' . $lot->hari : $lot->hari)) {
-                                    $dateApi = $item->date;
-                                    switch ($item->day) {
-                                        case 'Monday':
-                                            $day = 'Isnin';
-                                            break;
-                                        case 'Tuesday':
-                                            $day = 'Selasa';
-                                            break;
-                                        case 'Wednesday':
-                                            $day = 'Rabu';
-                                            break;
-                                        case 'Thursday':
-                                            $day = 'Khamis';
-                                            break;
-                                        case 'Friday':
-                                            $day = 'Jumaat';
-                                            break;
-                                        case 'Saturday':
-                                            $day = 'Sabtu';
-                                            break;
-                                        case 'Sunday':
-                                            $day = 'Ahad';
-                                            break;
-                                    }
-                                    $dateDay = $day;
-                                    break; // Assuming there's only one match, you can remove break if there could be multiple matches
-                                }
-                            }
+                            $transaction = App\Models\RamadhanTransaction::whereId(request('order_id'))
+                                ->whereStatus('paid')
+                                ->firstOrFail();
                         @endphp
-
-                        <div class="p-4 {{ $lot->quota - $lot->transactions->where('status', 'paid')->count() == 0 ? 'bg-slate-400 cursor-not-allowed' : 'bg-white cursor-pointer lot-ramadhan' }} rounded-md hover:shadow-md mx-4 md:mx-0 {{ $lot->hari == '30' ? 'invisible' : 'visible' }}"
-                            data-lotid="{{ $lot->id }}" data-hari="{{ $lot->hari }}"
-                            data-jumlah="{{ $lot->jumlah_lot }}" data-ramadhan="{{ $lot->ramadhan->id }}"
-                            data-masjid="{{ $lot->masjid->id }}"
-                            data-tarikh="{{ $dateApi }} ({{ $dateDay }})"
-                            data-description="{{ $lot->description }}">
-                            <div class="flex flex-row">
-                                <div>
-                                    <div
-                                        class="p-2 rounded-md {{ $lot->quota - $lot->transactions->where('status', 'paid')->count() == 0 ? 'bg-slate-400' : 'bg-zinc-100' }} w-[100px] h-[96px]">
-                                        <h5 class="text-xs upp">Ramadhan</h5>
-                                        <h2 class="text-2xl font-bold">{{ $lot->hari }}</h2>
-                                        <p class="text-xs text-gray-500">
-                                            @if ($lot->hari != 30)
-                                                {{ $dateApi }} <br>
-                                                ({{ $dateDay }})
-                                            @endif
-                                        </p>
-                                    </div>
+                        @if ($transaction)
+                            <div class="mx-4">
+                                <div
+                                    class="px-4 p-2 bg-green-100 text-green-700 rounded border-1 border-green-700 mb-4 shadow">
+                                    <h4>Alhamdulillah ! Bayaran telah diterima.</h4>
                                 </div>
-                                <div class="text-right flex flex-col items-right w-full pt-1">
-                                    <h3 class="font-bold">RM {{ $lot->jumlah_lot }} / lot</h3>
-                                    <p class="text-sm text-gray-500">Jumlah Tajaan: RM {{ $lot->sasaran }}</p>
-                                    <p class="text-sm text-gray-500">Lot Kosong: <span
-                                            class="{{ $lot->quota - $lot->transactions->where('status', 'paid')->count() == 0 ? '' : 'text-red-600 font-bold' }}">{{ $lot->quota - $lot->transactions->where('status', 'paid')->count() }}/{{ $lot->quota }}</span>
-                                    </p>
-                                    <p class="text-sm text-gray-500">{{ $lot->description }}</p>
+                                <div class="bg-yellow-100 p-4 rounded shadow">
+                                    <table class="text-left text-slate-700">
+                                        <tr>
+                                            <td>Nama</td>
+                                            <td class="px-4">:</td>
+                                            <td class="">{{ $transaction->nama }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Keterangan</td>
+                                            <td class="px-4">:</td>
+                                            <td class="">{{ $transaction->nama }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>BillCode</td>
+                                            <td class="px-4">:</td>
+                                            <td class="">{{ request()->billcode }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Rujukan</td>
+                                            <td class="px-4">:</td>
+                                            <td class="">{{ request()->transaction_id }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Jumlah</td>
+                                            <td class="px-4">:</td>
+                                            <td class="">{{ $transaction->jumlah }}</td>
+                                        </tr>
+                                    </table>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
+                        @endif
+                    @else
+                        <h2 class="uppercase text-sm font-bold">Pilih Lot</h2>
+                        @foreach ($lots as $lot)
+                            @php
+                                $date = json_decode(App\Models\Calendar::where('year', \Carbon\Carbon::now()->year)->first()->data)->prayerTime;
+
+                                foreach ($date as $item) {
+                                    if (isset($item->hijri) && $item->hijri === '1445-09-' . ($lot->hari < 10 ? '0' . $lot->hari : $lot->hari)) {
+                                        $dateApi = $item->date;
+                                        switch ($item->day) {
+                                            case 'Monday':
+                                                $day = 'Isnin';
+                                                break;
+                                            case 'Tuesday':
+                                                $day = 'Selasa';
+                                                break;
+                                            case 'Wednesday':
+                                                $day = 'Rabu';
+                                                break;
+                                            case 'Thursday':
+                                                $day = 'Khamis';
+                                                break;
+                                            case 'Friday':
+                                                $day = 'Jumaat';
+                                                break;
+                                            case 'Saturday':
+                                                $day = 'Sabtu';
+                                                break;
+                                            case 'Sunday':
+                                                $day = 'Ahad';
+                                                break;
+                                        }
+                                        $dateDay = $day;
+                                        break; // Assuming there's only one match, you can remove break if there could be multiple matches
+                                    }
+                                }
+                            @endphp
+
+                            <div class="p-4 {{ $lot->quota - $lot->transactions->where('status', 'paid')->count() == 0 ? 'bg-slate-400 cursor-not-allowed' : 'bg-white cursor-pointer lot-ramadhan' }} rounded-md hover:shadow-md mx-4 md:mx-0 {{ $lot->hari == '30' ? 'invisible' : 'visible' }}"
+                                data-lotid="{{ $lot->id }}" data-hari="{{ $lot->hari }}"
+                                data-jumlah="{{ $lot->jumlah_lot }}" data-ramadhan="{{ $lot->ramadhan->id }}"
+                                data-masjid="{{ $lot->masjid->id }}"
+                                data-tarikh="{{ $dateApi }} ({{ $dateDay }})"
+                                data-description="{{ $lot->description }}">
+                                <div class="flex flex-row">
+                                    <div>
+                                        <div
+                                            class="p-2 rounded-md {{ $lot->quota - $lot->transactions->where('status', 'paid')->count() == 0 ? 'bg-slate-400' : 'bg-zinc-100' }} w-[100px] h-[96px]">
+                                            <h5 class="text-xs upp">Ramadhan</h5>
+                                            <h2 class="text-2xl font-bold">{{ $lot->hari }}</h2>
+                                            <p class="text-xs text-gray-500">
+                                                @if ($lot->hari != 30)
+                                                    {{ $dateApi }} <br>
+                                                    ({{ $dateDay }})
+                                                @endif
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right flex flex-col items-right w-full pt-1">
+                                        <h3 class="font-bold">RM {{ $lot->jumlah_lot }} / lot</h3>
+                                        <p class="text-sm text-gray-500">Jumlah Tajaan: RM {{ $lot->sasaran }}</p>
+                                        <p class="text-sm text-gray-500">Lot Kosong: <span
+                                                class="{{ $lot->quota - $lot->transactions->where('status', 'paid')->count() == 0 ? '' : 'text-red-600 font-bold' }}">{{ $lot->quota - $lot->transactions->where('status', 'paid')->count() }}/{{ $lot->quota }}</span>
+                                        </p>
+                                        <p class="text-sm text-gray-500">{{ $lot->description }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+
+                    @endif
                 </div>
             </div>
 
