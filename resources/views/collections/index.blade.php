@@ -54,7 +54,7 @@
 
                             if (
                                 App\Models\RamadhanTransaction::whereId($transactionId)
-                                    ->wherStatus('unpaid')
+                                    ->whereStatus('unpaid')
                                     ->exists()
                             ) {
                                 $updatePayment = App\Models\RamadhanTransaction::whereId($transactionId)->update(['status' => 'paid', 'mark_as_paid' => \Carbon\Carbon::now()]);
