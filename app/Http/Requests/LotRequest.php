@@ -25,9 +25,9 @@ class LotRequest extends FormRequest
     public function rules()
     {
         return [
-            'hari' => 'required|min:5|max:255',
+            'hari' => 'required|min:1|max:255',
             'quota' => 'required|min:1|max:255',
-            'jumlah_lot' => 'required|min:5|max:255',
+            'jumlah_lot' => 'required|min:1|max:255',
             'sasaran' => 'required|min:5|max:255',
             'description' => 'required|min:5|max:255',
         ];

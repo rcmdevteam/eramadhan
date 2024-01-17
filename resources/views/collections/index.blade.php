@@ -43,7 +43,13 @@
                     @if (request('billcode') && request('transaction_id') && request('status_id') == 1)
 
                         @php
-                            $transaction = App\Models\RamadhanTransaction::whereId(request('order_id'))
+                            $transactionReferenceNo = $request->input('order_id');
+                            $checkReference = explode('&', $transactionReferenceNo);
+
+                            $masjidId = $checkReference[0];
+                            $transactionId = $checkReference[1];
+
+                            $transaction = App\Models\RamadhanTransaction::whereId($transactionId)
                                 ->whereStatus('paid')
                                 ->firstOrFail();
                         @endphp
