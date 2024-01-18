@@ -34,17 +34,14 @@ Route::any('/payment/toyyibpay/callback', function (Request $request) {
     $masjidId = request()->order_id;
 
     $order_id_key = array_search('order_id', array_keys($data));
+    $transactionId = null;
 
     if ($order_id_key !== false && isset(array_keys($data)[$order_id_key + 1])) {
         $next_key = array_keys($data)[$order_id_key + 1];
         $transactionId = $next_key;
     }
 
-    $transaction = RamadhanTransaction::whereId($transactionId)->whereMasjidId($masjidId)->where(
-        'status',
-        '!=',
-        'paid'
-    )->firstOrFail();
+    $transaction = RamadhanTransaction::whereId($transactionId)->whereMasjidId($masjidId)->firstOrFail();
 
     if ($request->input('status') == '1' || $request->input('reason') == 'Approved') {
 
