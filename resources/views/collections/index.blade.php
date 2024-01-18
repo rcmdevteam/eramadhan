@@ -96,8 +96,7 @@
                                         <tr>
                                             <td>Keterangan</td>
                                             <td class="px-4">:</td>
-                                            <td class="">{{ $transaction->ramadhan }} Ramadhan - 1 Lot RM
-                                                {{ App\Models\Lot::find($transaction->id)->jumlah_lot }}</td>
+                                            <td class="">{{ $transaction->ramadhan }} Ramadhan - 1 Lot</td>
                                         </tr>
                                         <tr>
                                             <td>BillCode</td>
