@@ -29,17 +29,21 @@ Route::get('/home', function () {
 
 Route::any('/payment/toyyibpay/callback', function (Request $request) {
     \Log::info(request()->all());
-    $transactionReferenceNo = $request->input('order_id');
 
-    $checkReference = explode('&', $transactionReferenceNo);
+    $data = request()->all();
+    $masjidId = request()->order_id;
 
-    $masjidId = $checkReference[0];
-    $transactionId = $checkReference[1];
+    $order_id_key = array_search('order_id', array_keys($data));
+
+    if ($order_id_key !== false && isset(array_keys($data)[$order_id_key + 1])) {
+        $next_key = array_keys($data)[$order_id_key + 1];
+        $transactionId = $next_key;
+    }
 
     $transaction = RamadhanTransaction::whereId($transactionId)->whereMasjidId($masjidId)->where(
         'status',
         '!=',
-        2
+        'paid'
     )->firstOrFail();
 
     if ($request->input('status') == '1' || $request->input('reason') == 'Approved') {

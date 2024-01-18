@@ -25,10 +25,21 @@
                 style="background-image: url('{!! Storage::url($masjid->photo) !!}'); background-size: cover; background-position: center center">
             </div>
             <h1 class="text-center text-2xl font-black mb-2">{{ $masjid->name }}</h1>
-            <h2 class="text-center text-xl text-slate-600">Tempahan {{ config('app.name') }} {{ $ramadhan->tahun }}H
+            <h2 class="text-center text-xl text-slate-600">Tempahan Lot {{ config('app.name') }} {{ $ramadhan->tahun }}H
             </h2>
             <div class="py-10">
+
                 <div class="flex flex-col gap-4 text-center w-[450px] ml-auto mr-auto">
+
+                    <div class="mb-10 px-4">
+                        <form action="#" class="flex flex-col">
+                            <label for="telefon" class="inline text-slate-600">Semak Tempahan:</label>
+                            <input type="text" name="telefon" placeholder="60123456789"
+                                class="p-1 rounded px-2 w-[200px] mr-auto ml-auto text-center mt-2"
+                                value="{{ request('telefon') }}">
+                            @csrf
+                        </form>
+                    </div>
 
                     @if ($errors->any())
                         <div class="bg-red-100 text-red-700 p-2 rounded border border-red-700 text-left px-4 mb-4">
