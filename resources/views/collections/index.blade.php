@@ -31,14 +31,38 @@
 
                 <div class="flex flex-col gap-4 text-center w-[450px] ml-auto mr-auto">
 
-                    <div class="mb-10 px-4" style="display: none">
+                    <div class="mb-10">
                         <form action="#" class="flex flex-col">
                             <label for="telefon" class="inline text-slate-600">Semak Tempahan:</label>
-                            <input type="text" name="telefon" placeholder="60123456789"
-                                class="p-1 rounded px-2 w-[200px] mr-auto ml-auto text-center mt-2"
+                            <input type="number" name="telefon" placeholder="60123456789"
+                                class="p-1 rounded px-2 w-[200px] mr-auto ml-auto text-center mt-2 border"
                                 value="{{ request('telefon') }}">
                             @csrf
                         </form>
+                        @if (request('telefon') && request('_token'))
+                            <div
+                                class="p-2 px-4 mt-4 bg-green-300 text-green-800 text-left rounded relative shadow border-green-500 border">
+                                @if (request('telefon') && request('_token'))
+                                    <a href="{{ url('/' . $masjid->short_name) }}"
+                                        class="bg-white absolute right-0 size-4 rounded w-[24px] h-[24px] text-center text-sm -mt-4 -mr-2 border">X</a>
+                                @endif
+                                @php
+                                    $details = App\Models\Transaksi::where('telefon', request('telefon'))
+                                        ->whereMasjidId($masjid->id)
+                                        ->whereStatus('paid')
+                                        ->firstOrFail();
+                                @endphp
+                                <div class="flex flex-row">
+                                    <div class="flex-1">
+                                        {{ Str::limit($details->nama, 14) }}
+                                    </div>
+                                    <div class="flex-1 text-right">
+                                        {{ $details->hari }} Ramadhan &middot;
+                                        RM {{ $details->jumlah }}
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                     </div>
 
                     @if ($errors->any())
@@ -84,7 +108,7 @@
                             <div class="mx-4">
                                 <div
                                     class="px-4 p-2 bg-green-100 text-green-700 rounded border-1 border-green-700 mb-4 shadow">
-                                    <h4>Alhamdulillah ! Bayaran telah diterima.</h4>
+                                    <h4>Alhamdulillah! Bayaran telah diterima.</h4>
                                 </div>
                                 <div class="bg-yellow-100 p-4 rounded shadow">
                                     <table class="text-left text-slate-700">
@@ -119,6 +143,24 @@
                         @endif
                     @else
                         <h2 class="uppercase text-sm font-bold">Pilih Lot</h2>
+
+                        @php
+                            function displayPartialString($inputString)
+                            {
+                                $length = strlen($inputString);
+
+                                // Display the first two characters
+                                echo substr($inputString, 0, 2);
+
+                                // Display asterisks for the remaining characters
+                                for ($i = 2; $i < $length; $i++) {
+                                    echo '*';
+                                }
+
+                                echo PHP_EOL; // Add a new line for better formatting
+                            }
+                        @endphp
+
                         @foreach ($lots as $lot)
                             @php
                                 $date = json_decode(App\Models\Calendar::where('year', \Carbon\Carbon::now()->year)->first()->data)->prayerTime;
@@ -155,33 +197,61 @@
                                 }
                             @endphp
 
-                            <div class="p-4 {{ $lot->quota - $lot->transactions->where('status', 'paid')->count() == 0 ? 'bg-slate-400 cursor-not-allowed' : 'bg-white cursor-pointer lot-ramadhan' }} rounded-md hover:shadow-md mx-4 md:mx-0 {{ $lot->hari == '30' ? 'invisible' : 'visible' }}"
-                                data-lotid="{{ $lot->id }}" data-hari="{{ $lot->hari }}"
-                                data-jumlah="{{ $lot->jumlah_lot }}" data-ramadhan="{{ $lot->ramadhan->id }}"
-                                data-masjid="{{ $lot->masjid->id }}"
-                                data-tarikh="{{ $dateApi }} ({{ $dateDay }})"
-                                data-description="{{ $lot->description }}">
-                                <div class="flex flex-row">
-                                    <div>
-                                        <div
-                                            class="p-2 rounded-md {{ $lot->quota - $lot->transactions->where('status', 'paid')->count() == 0 ? 'bg-slate-400' : 'bg-zinc-100' }} w-[100px] h-[96px]">
-                                            <h5 class="text-xs upp">Ramadhan</h5>
-                                            <h2 class="text-2xl font-bold">{{ $lot->hari }}</h2>
-                                            <p class="text-xs text-gray-500">
-                                                @if ($lot->hari != 30)
-                                                    {{ $dateApi }} <br>
-                                                    ({{ $dateDay }})
-                                                @endif
+                            <div
+                                class="{{ $lot->hari == '30' ? 'invisible' : 'visible' }} hover:shadow-md rounded-tl-md rounded-tr-md rounded-br-md rounded-bl-md">
+                                <div class="p-4 {{ $lot->quota - $lot->transactions->where('status', 'paid')->count() == 0 ? 'bg-slate-400 cursor-not-allowed' : 'bg-white cursor-pointer lot-ramadhan' }} rounded-tl-md rounded-tr-md mx-4 md:mx-0"
+                                    data-lotid="{{ $lot->id }}" data-hari="{{ $lot->hari }}"
+                                    data-jumlah="{{ $lot->jumlah_lot }}" data-ramadhan="{{ $lot->ramadhan->id }}"
+                                    data-masjid="{{ $lot->masjid->id }}"
+                                    data-tarikh="{{ $dateApi }} ({{ $dateDay }})"
+                                    data-description="{{ $lot->description }}">
+                                    <div class="flex flex-row">
+                                        <div>
+                                            <div
+                                                class="p-2 rounded-md {{ $lot->quota - $lot->transactions->where('status', 'paid')->count() == 0 ? 'bg-slate-400' : 'bg-zinc-100' }} w-[100px] h-[96px]">
+                                                <h5 class="text-xs upp">Ramadhan</h5>
+                                                <h2 class="text-2xl font-bold">{{ $lot->hari }}</h2>
+                                                <p class="text-xs text-gray-500">
+                                                    @if ($lot->hari != 30)
+                                                        {{ $dateApi }} <br>
+                                                        ({{ $dateDay }})
+                                                    @endif
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="text-right flex flex-col items-right w-full pt-1">
+                                            <h3 class="font-bold">RM {{ $lot->jumlah_lot }} / lot</h3>
+                                            <p class="text-sm text-gray-500">Jumlah Tajaan: RM {{ $lot->sasaran }}</p>
+                                            <p class="text-sm text-gray-500">Lot Kosong: <span
+                                                    class="{{ $lot->quota - $lot->transactions->where('status', 'paid')->count() == 0 ? '' : 'text-red-600 font-bold' }}">{{ $lot->quota - $lot->transactions->where('status', 'paid')->count() }}/{{ $lot->quota }}</span>
                                             </p>
+                                            <p class="text-sm text-gray-500">{{ $lot->description }}</p>
                                         </div>
                                     </div>
-                                    <div class="text-right flex flex-col items-right w-full pt-1">
-                                        <h3 class="font-bold">RM {{ $lot->jumlah_lot }} / lot</h3>
-                                        <p class="text-sm text-gray-500">Jumlah Tajaan: RM {{ $lot->sasaran }}</p>
-                                        <p class="text-sm text-gray-500">Lot Kosong: <span
-                                                class="{{ $lot->quota - $lot->transactions->where('status', 'paid')->count() == 0 ? '' : 'text-red-600 font-bold' }}">{{ $lot->quota - $lot->transactions->where('status', 'paid')->count() }}/{{ $lot->quota }}</span>
-                                        </p>
-                                        <p class="text-sm text-gray-500">{{ $lot->description }}</p>
+                                </div>
+                                <div
+                                    class="bg-white px-4 pb-2 rounded-bl-md rounded-br-md text-sm text-slate-400 border-t border-t-slate-100 pt-2">
+                                    <div class="flex flex-row">
+                                        <div class="flex-1 text-left">
+                                            Senarai Tempahan
+                                        </div>
+                                        <div class="flex-1 text-right">
+                                            <button class="lot-senarai" data-lotid="{{ $lot->id }}">Papar</button>
+                                        </div>
+                                    </div>
+                                    <div class="text-left mt-2" id="senarai{{ $lot->id }}" style="display:none">
+                                        <ul>
+                                            @foreach ($lot->transactions()->where('status', 'paid')->get() as $item)
+                                                <li class="text-slate-600">
+                                                    <div class="flex flex-row">
+                                                        <div class="flex-1">{{ displayPartialString($item->nama) }}
+                                                        </div>
+                                                        <div class="flex-1 text-right">
+                                                            {{ $item->created_at->format('d-M-Y') }}</div>
+                                                    </div>
+                                                </li>
+                                            @endforeach
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
@@ -209,7 +279,7 @@
             <div class="p-8 bg-black/50 hover:shadow">
                 <div class="flex flex-row">
                     <div class="text-center">
-                        <div class="p-2 rounded-md bg-white w-[100px] h-[96px]">
+                        <div class="p-2 rounded-md bg-white/80 w-[100px] h-[96px]">
                             <h5 class="text-xs">Ramadhan</h5>
                             <h2>
                                 <div id="display_hari" class="font-bold text-2xl"></div>
@@ -268,8 +338,8 @@
         </form>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js"
-        integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.js"
+        integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
     <script>
         $(document).ready(function() {
             $(".lot-ramadhan").on("click", function() {
@@ -316,6 +386,11 @@
 
             $("#submitBtn").on("click", function() {
                 $("#form_container").removeClass("visible").addClass("invisible");
+            });
+
+            $(".lot-senarai").on("click", function() {
+                var lotid = $(this).data("lotid");
+                $("#senarai" + lotid).toggle("slow");
             });
         });
     </script>
