@@ -31,7 +31,7 @@
 
                 <div class="flex flex-col gap-4 text-center w-[450px] ml-auto mr-auto">
 
-                    <div class="mb-10 px-4">
+                    <div class="mb-10 px-4" style="display: none">
                         <form action="#" class="flex flex-col">
                             <label for="telefon" class="inline text-slate-600">Semak Tempahan:</label>
                             <input type="text" name="telefon" placeholder="60123456789"
