@@ -31,39 +31,41 @@
 
                 <div class="flex flex-col gap-4 text-center w-[450px] ml-auto mr-auto">
 
-                    <div class="mb-10">
-                        <form action="#" class="flex flex-col">
-                            <label for="telefon" class="inline text-slate-600">Semak Tempahan:</label>
-                            <input type="number" name="telefon" placeholder="60123456789"
-                                class="p-1 rounded px-2 w-[200px] mr-auto ml-auto text-center mt-2 border"
-                                value="{{ request('telefon') }}">
-                            @csrf
-                        </form>
-                        @if (request('telefon') && request('_token'))
-                            <div
-                                class="p-2 px-4 mt-4 bg-green-300 text-green-800 text-left rounded relative shadow border-green-500 border">
-                                @if (request('telefon') && request('_token'))
-                                    <a href="{{ url('/' . $masjid->short_name) }}"
-                                        class="bg-white absolute right-0 size-4 rounded w-[24px] h-[24px] text-center text-sm -mt-4 -mr-2 border">X</a>
-                                @endif
-                                @php
-                                    $details = App\Models\Transaksi::where('telefon', request('telefon'))
-                                        ->whereMasjidId($masjid->id)
-                                        ->whereStatus('paid')
-                                        ->firstOrFail();
-                                @endphp
-                                <div class="flex flex-row">
-                                    <div class="flex-1">
-                                        {{ Str::limit($details->nama, 14) }}
-                                    </div>
-                                    <div class="flex-1 text-right">
-                                        {{ $details->hari }} Ramadhan &middot;
-                                        RM {{ $details->jumlah }}
+                    @if (!request('transaction_id'))
+                        <div class="mb-10">
+                            <form action="#" class="flex flex-col">
+                                <label for="telefon" class="inline text-slate-600">Semak Tempahan:</label>
+                                <input type="number" name="telefon" placeholder="60123456789"
+                                    class="p-1 rounded px-2 w-[200px] mr-auto ml-auto text-center mt-2 border"
+                                    value="{{ request('telefon') }}">
+                                @csrf
+                            </form>
+                            @if (request('telefon') && request('_token'))
+                                <div
+                                    class="p-2 px-4 mt-4 bg-green-300 text-green-800 text-left rounded relative shadow border-green-500 border">
+                                    @if (request('telefon') && request('_token'))
+                                        <a href="{{ url('/' . $masjid->short_name) }}"
+                                            class="bg-white absolute right-0 size-4 rounded w-[24px] h-[24px] text-center text-sm -mt-4 -mr-2 border">X</a>
+                                    @endif
+                                    @php
+                                        $details = App\Models\Transaksi::where('telefon', request('telefon'))
+                                            ->whereMasjidId($masjid->id)
+                                            ->whereStatus('paid')
+                                            ->firstOrFail();
+                                    @endphp
+                                    <div class="flex flex-row">
+                                        <div class="flex-1">
+                                            {{ Str::limit($details->nama, 14) }}
+                                        </div>
+                                        <div class="flex-1 text-right">
+                                            {{ $details->hari }} Ramadhan &middot;
+                                            RM {{ $details->jumlah }}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        @endif
-                    </div>
+                            @endif
+                        </div>
+                    @endif
 
                     @if ($errors->any())
                         <div class="bg-red-100 text-red-700 p-2 rounded border border-red-700 text-left px-4 mb-4">
