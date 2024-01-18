@@ -138,6 +138,10 @@
                                             <td class="">{{ $transaction->jumlah }}</td>
                                         </tr>
                                     </table>
+
+                                    <a href="{{ url('/' . $transaction->masjid->short_name) }}" class="mt-4">Kembali
+                                        ke laman
+                                        utama</a>
                                 </div>
                             </div>
                         @endif
