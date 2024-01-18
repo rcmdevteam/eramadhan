@@ -138,12 +138,12 @@
                                             <td class="">{{ $transaction->jumlah }}</td>
                                         </tr>
                                     </table>
-
-                                    <a href="{{ url('/' . $transaction->masjid->short_name) }}" class="mt-4">Kembali
-                                        ke laman
-                                        utama</a>
                                 </div>
                             </div>
+
+                            <a href="{{ url('/' . $masjid->short_name) }}" class="mt-4">&larr; Kembali
+                                ke laman
+                                utama</a>
                         @endif
                     @else
                         <h2 class="uppercase text-sm font-bold">Pilih Lot</h2>
