@@ -257,7 +257,11 @@
                 <button type="submit"
                     class="bg-black text-white/90 font-bold uppercase p-4 text-sm rounded-md mt-2 mb-2">bayar
                     lot</button>
-                <p class="text-sm text-gray-400">&copy; eRamadhan &middot; Bukti pembayaran akan di hantar ke
+                <img src="{{ asset('/fpx.png') }}" alt="FPX" class="my-4">
+                <p class="text-sm
+                    text-gray-400 text-center">&copy; eRamadhan &middot; Bukti
+                    pembayaran akan di
+                    hantar ke
                     akaun
                     emel anda.</p>
                 @csrf
