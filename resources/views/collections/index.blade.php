@@ -13,7 +13,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-zinc-100">
+<body class="bg-zinc-100 overflow-x-hidden">
     <div class="w-full"
         style="background-image: url('{!! Storage::url($masjid->cover) !!}'); background-size: cover; background-position: center center">
         <div class="container ml-auto mr-auto h-[150px] md:h-[250px]">
@@ -29,7 +29,8 @@
             </h2>
             <div class="py-10">
 
-                <div class="flex flex-col gap-4 text-center w-[450px] ml-auto mr-auto">
+                <div
+                    class="flex flex-col gap-4 text-center w-[450px] md:w-[450px] sm:w-[100%] ml-auto mr-auto px-2 md:px-2 sm:px-4">
 
                     @if (!request('transaction_id'))
                         <div class="mb-10">
@@ -51,17 +52,19 @@
                                         $details = App\Models\Transaksi::where('telefon', request('telefon'))
                                             ->whereMasjidId($masjid->id)
                                             ->whereStatus('paid')
-                                            ->firstOrFail();
+                                            ->get();
                                     @endphp
-                                    <div class="flex flex-row">
-                                        <div class="flex-1">
-                                            {{ Str::limit($details->nama, 14) }}
+                                    @foreach ($details as $detail)
+                                        <div class="flex flex-row">
+                                            <div class="flex-1">
+                                                {{ Str::limit($detail->nama, 14) }}
+                                            </div>
+                                            <div class="flex-1 text-right">
+                                                {{ $detail->hari }} Ramadhan &middot;
+                                                RM {{ $detail->jumlah }}
+                                            </div>
                                         </div>
-                                        <div class="flex-1 text-right">
-                                            {{ $details->hari }} Ramadhan &middot;
-                                            RM {{ $details->jumlah }}
-                                        </div>
-                                    </div>
+                                    @endforeach
                                 </div>
                             @endif
                         </div>
@@ -205,7 +208,7 @@
 
                             <div
                                 class="{{ $lot->hari == '30' ? 'invisible' : 'visible' }} hover:shadow-md rounded-tl-md rounded-tr-md rounded-br-md rounded-bl-md">
-                                <div class="p-4 {{ $lot->quota - $lot->transactions->where('status', 'paid')->count() == 0 ? 'bg-slate-400 cursor-not-allowed' : 'bg-white cursor-pointer lot-ramadhan' }} rounded-tl-md rounded-tr-md mx-4 md:mx-0"
+                                <div class="p-4 {{ $lot->quota - $lot->transactions->where('status', 'paid')->count() == 0 ? 'bg-slate-400 cursor-not-allowed' : 'bg-white cursor-pointer lot-ramadhan' }} rounded-tl-md rounded-tr-md"
                                     data-lotid="{{ $lot->id }}" data-hari="{{ $lot->hari }}"
                                     data-jumlah="{{ $lot->jumlah_lot }}" data-ramadhan="{{ $lot->ramadhan->id }}"
                                     data-masjid="{{ $lot->masjid->id }}"
