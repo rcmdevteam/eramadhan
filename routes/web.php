@@ -132,6 +132,7 @@ Route::prefix('{masjid}')->middleware(['checking'])->group(function () {
         $lotid = request()->lotid;
         $masjid = request()->masjid;
         $ramadhan = request()->ramadhan;
+        $tarikh_masihi = request()->tarikh_masihi;
 
 
 
@@ -170,7 +171,8 @@ Route::prefix('{masjid}')->middleware(['checking'])->group(function () {
                 'userSecretKey'           => env('TOY_SKEY'),
                 'categoryCode'            => env('TOY_CID'),
                 'billName'                => $name,
-                'billDescription'         => 'Bayaran Lot: ' . $lotid . ' untuk Ramadhan: ' . $ramadhan,
+                'billDescription'          => "1 Lot, " . $ramadhan . " Ramadhan " . $transaction->ramadhan->tahun . ", " . $tarikh_masihi,
+                // 'billDescription'         => 'Bayaran Lot: ' . $lotid . ' untuk Ramadhan: ' . $ramadhan,
                 'billPriceSetting'        => 1,
                 'billPayorInfo'           => 1, // fix toyyibpay covid
                 'billAmount'              => $amountToPay['amount'],

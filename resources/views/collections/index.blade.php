@@ -236,7 +236,7 @@
                                     </div>
                                 </div>
                                 <div
-                                    class="bg-white px-4 pb-2 rounded-bl-md rounded-br-md text-sm text-slate-400 border-t border-t-slate-100 pt-2">
+                                    class="bg-white px-4 mx-0 pb-2 rounded-bl-md rounded-br-md text-sm text-slate-400 border-t border-t-slate-100 pt-2">
                                     <div class="flex flex-row">
                                         <div class="flex-1 text-left">
                                             Senarai Tempahan
@@ -329,6 +329,8 @@
                     value="">
                 <input type="hidden" name="masjid" id="masjid" class="border p-1 rounded mb-4 px-1.5" required
                     value="">
+                <input type="hidden" name="tarikh_masihi" id="tarikh_masihi" class="border p-1 rounded mb-4 px-1.5"
+                    required value="">
                 <button type="submit"
                     class="bg-black text-white/90 font-bold uppercase p-4 text-sm rounded-md mt-2 mb-2">bayar
                     lot</button>
@@ -367,6 +369,7 @@
 
                 $("#form_container #lotid").val(lotid);
                 $("#form_container #hari").val(hari);
+                $("#form_container #tarikh_masihi").val(tarikh);
                 $("#form_container #jumlah").val(jumlah);
                 $("#form_container #masjid").val(masjid);
                 $("#form_container #ramadhan").val(ramadhan);
