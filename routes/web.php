@@ -171,7 +171,7 @@ Route::prefix('{masjid}')->middleware(['checking'])->group(function () {
                 'userSecretKey'           => env('TOY_SKEY'),
                 'categoryCode'            => env('TOY_CID'),
                 'billName'                => $name,
-                'billDescription'          => "1 Lot, " . $ramadhan . " Ramadhan " . $transaction->ramadhan->tahun . ", " . $tarikh_masihi,
+                'billDescription'          => "1 Lot, " . $ramadhan . " Ramadhan " . \App\Models\Ramadhan::whereId($transaction->ramadhan_id)->first()->tahun . ", " . $tarikh_masihi,
                 // 'billDescription'         => 'Bayaran Lot: ' . $lotid . ' untuk Ramadhan: ' . $ramadhan,
                 'billPriceSetting'        => 1,
                 'billPayorInfo'           => 1, // fix toyyibpay covid
