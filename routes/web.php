@@ -144,7 +144,7 @@ Route::prefix('{masjid}')->middleware(['checking'])->group(function () {
         $transaction->ramadhan = $hari;
         $transaction->jumlah = $jumlah;
         $transaction->kuantiti = 1;
-        // $transaction->toyyibpay_ref = '';
+        // $transaction->toyyibpay_ref = $tarikh_masihi;
         $transaction->status = 'unpaid';
         $transaction->ramadhan_id = $ramadhan;
         $transaction->masjid_id = $masjid;
@@ -162,6 +162,7 @@ Route::prefix('{masjid}')->middleware(['checking'])->group(function () {
         // } else {
         // $toyyibPayMethod = $masjid->option_toyyibpay_type;
         // }
+        $description = "1 Lot, " . $ramadhan . " Ramadhan " . \App\Models\Ramadhan::whereId($transaction->ramadhan_id)->first()->tahun . " " . $tarikh_masihi;
 
         // Perform Toyyibpay
         $toyyibpay = new \GuzzleHttp\Client(); //GuzzleHttp\Client
@@ -171,7 +172,7 @@ Route::prefix('{masjid}')->middleware(['checking'])->group(function () {
                 'userSecretKey'           => env('TOY_SKEY'),
                 'categoryCode'            => env('TOY_CID'),
                 'billName'                => $name,
-                'billDescription'          => "1 Lot, " . $ramadhan . " Ramadhan " . \App\Models\Ramadhan::whereId($transaction->ramadhan_id)->first()->tahun . ", " . $tarikh_masihi,
+                'billDescription'          => $description,
                 // 'billDescription'         => 'Bayaran Lot: ' . $lotid . ' untuk Ramadhan: ' . $ramadhan,
                 'billPriceSetting'        => 1,
                 'billPayorInfo'           => 1, // fix toyyibpay covid
