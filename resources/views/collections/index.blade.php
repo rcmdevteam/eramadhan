@@ -57,7 +57,7 @@
                                     </div>
                                 @else
                                     <div
-                                        class="p-2 px-4 mt-4 bg-green-300 text-green-800 text-left rounded-full relative shadow border-green-500 border">
+                                        class="p-2 px-4 mt-4 bg-green-300 text-green-800 text-left rounded relative shadow border-green-500 border">
                                         @if (request('telefon') && request('_token'))
                                             <a href="{{ url('/' . $masjid->short_name) }}"
                                                 class="bg-white absolute right-0 size-4 rounded w-[24px] h-[24px] text-center text-sm -mt-4 -mr-2 border">X</a>
