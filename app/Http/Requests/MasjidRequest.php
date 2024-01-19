@@ -26,7 +26,7 @@ class MasjidRequest extends FormRequest
     {
         return [
             'name' => 'required|min:5|max:255',
-            'short_name' => 'required|min:5|max:255',
+            'short_name' => 'required|min:3|max:255',
             'location' => 'required|min:5|max:255',
         ];
     }

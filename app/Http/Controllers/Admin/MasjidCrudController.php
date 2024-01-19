@@ -48,6 +48,7 @@ class MasjidCrudController extends CrudController
         CRUD::column('name');
         CRUD::column('location');
         CRUD::column('short_name');
+        CRUD::column('phone');
         // CRUD::column('created_at');
         // CRUD::column('updated_at');
 
@@ -71,6 +72,12 @@ class MasjidCrudController extends CrudController
         CRUD::field('name');
         CRUD::field('short_name');
         CRUD::field('location');
+        $this->crud->addfield([
+            'name' => 'phone', // Replace with the actual field name
+            'type' => 'number',
+            'label' => 'No Telefon Pentadbir',
+            'hint' => 'Contoh: 60132465974'
+        ]);
 
         if ($this->crud->getActionMethod() == 'edit' || $this->crud->getActionMethod() == 'update') {
             CRUD::addField(
