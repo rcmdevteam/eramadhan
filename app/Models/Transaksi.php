@@ -51,6 +51,11 @@ class Transaksi extends Model
         return $this->belongsTo(Ramadhan::class);
     }
 
+    public function ramadhanDetail()
+    {
+        return $this->belongsTo(Ramadhan::class, 'ramadhan_id');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
