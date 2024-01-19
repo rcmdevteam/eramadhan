@@ -42,30 +42,39 @@
                                 @csrf
                             </form>
                             @if (request('telefon') && request('_token'))
-                                <div
-                                    class="p-2 px-4 mt-4 bg-green-300 text-green-800 text-left rounded relative shadow border-green-500 border">
-                                    @if (request('telefon') && request('_token'))
+                                @php
+                                    $details = App\Models\Transaksi::where('telefon', request('telefon'))
+                                        ->whereMasjidId($masjid->id)
+                                        ->whereStatus('paid')
+                                        ->get();
+                                @endphp
+                                @if ($details->count() == 0)
+                                    <div
+                                        class="mt-4 p-2 px-4 bg-slate-200 rounded shadow border border-slate-300 relative">
                                         <a href="{{ url('/' . $masjid->short_name) }}"
-                                            class="bg-white absolute right-0 size-4 rounded w-[24px] h-[24px] text-center text-sm -mt-4 -mr-2 border">X</a>
-                                    @endif
-                                    @php
-                                        $details = App\Models\Transaksi::where('telefon', request('telefon'))
-                                            ->whereMasjidId($masjid->id)
-                                            ->whereStatus('paid')
-                                            ->get();
-                                    @endphp
-                                    @foreach ($details as $detail)
-                                        <div class="flex flex-row">
-                                            <div class="flex-1">
-                                                {{ Str::limit($detail->nama, 14) }}
+                                            class="bg-white absolute right-0 size-4 rounded-full w-[24px] h-[24px] text-center text-sm -mt-4 -mr-2 border">X</a>
+                                        <p class="text-slate-500"><i>Tiada rekod.</i></p>
+                                    </div>
+                                @else
+                                    <div
+                                        class="p-2 px-4 mt-4 bg-green-300 text-green-800 text-left rounded-full relative shadow border-green-500 border">
+                                        @if (request('telefon') && request('_token'))
+                                            <a href="{{ url('/' . $masjid->short_name) }}"
+                                                class="bg-white absolute right-0 size-4 rounded w-[24px] h-[24px] text-center text-sm -mt-4 -mr-2 border">X</a>
+                                        @endif
+                                        @foreach ($details as $detail)
+                                            <div class="flex flex-row">
+                                                <div class="flex-1">
+                                                    {{ Str::limit($detail->nama, 14) }}
+                                                </div>
+                                                <div class="flex-1 text-right">
+                                                    {{ $detail->hari }} Ramadhan &middot;
+                                                    RM {{ $detail->jumlah }}
+                                                </div>
                                             </div>
-                                            <div class="flex-1 text-right">
-                                                {{ $detail->hari }} Ramadhan &middot;
-                                                RM {{ $detail->jumlah }}
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </div>
+                                        @endforeach
+                                    </div>
+                                @endif
                             @endif
                         </div>
                     @endif
@@ -261,10 +270,12 @@
                                             Senarai Tempahan
                                         </div>
                                         <div class="flex-1 text-right">
-                                            <button class="lot-senarai" data-lotid="{{ $lot->id }}">Papar</button>
+                                            <button class="lot-senarai"
+                                                data-lotid="{{ $lot->id }}">Papar</button>
                                         </div>
                                     </div>
-                                    <div class="text-left mt-2" id="senarai{{ $lot->id }}" style="display:none">
+                                    <div class="text-left mt-2" id="senarai{{ $lot->id }}"
+                                        style="display:none">
                                         <ul>
                                             @foreach ($lot->transactions()->where('status', 'paid')->get() as $item)
                                                 <li class="text-slate-600">
