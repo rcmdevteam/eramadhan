@@ -155,7 +155,7 @@
                                 ke laman
                                 utama</a>
 
-                            <a href="https://wa.me/{{ $masjid->phone }}?text={!! url()->full() !!}"
+                            <a href="https://wa.me/{{ $masjid->phone }}"
                                 class="text-center mt-4 flex flex-row justify-center items-start hover:underline"
                                 target="_blank">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
