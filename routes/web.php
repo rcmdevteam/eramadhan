@@ -162,7 +162,7 @@ Route::prefix('{masjid}')->middleware(['checking'])->group(function () {
         // } else {
         // $toyyibPayMethod = $masjid->option_toyyibpay_type;
         // }
-        $description = "1 Lot, " . $ramadhan . " Ramadhan " . \App\Models\Ramadhan::whereId($transaction->ramadhan_id)->first()->tahun . " " . $tarikh_masihi;
+        $description = "1 Lot, " . $transaction->ramadhan . " Ramadhan " . \App\Models\Ramadhan::whereId($transaction->ramadhan_id)->first()->tahun . ", " . $tarikh_masihi;
 
         // Perform Toyyibpay
         $toyyibpay = new \GuzzleHttp\Client(); //GuzzleHttp\Client

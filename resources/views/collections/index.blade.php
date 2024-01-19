@@ -125,7 +125,11 @@
                                         <tr>
                                             <td>Keterangan</td>
                                             <td class="px-4">:</td>
-                                            <td class="">{{ $transaction->ramadhan }} Ramadhan - 1 Lot</td>
+                                            <td class="">
+                                                1 Lot, {{ $transaction->ramadhan }} Ramadhan
+                                                {{ \App\Models\Ramadhan::whereId($transaction->ramadhan_id)->first()->tahun }}
+                                                {{-- $tarikh_masihi --}}
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td>BillCode</td>
