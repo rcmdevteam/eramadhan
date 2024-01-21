@@ -163,7 +163,7 @@ Route::prefix('{masjid}')->middleware(['checking'])->group(function () {
         // }
         $description = "1 Lot, " . $transaction->ramadhan . " Ramadhan " . \App\Models\Ramadhan::whereId($transaction->ramadhan_id)->first()->tahun . ", " . $tarikh_masihi;
 
-        $urlToyyibPay = ($masjid->toyyibpay_secret_key)
+        $urlToyyibPay = ($transaction->masjid->toyyibpay_secret_key)
             ? 'https://toyyibpay.com' // prod
             : 'https://dev.toyyibpay.com'; // test
 
