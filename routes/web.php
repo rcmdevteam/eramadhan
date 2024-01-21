@@ -163,7 +163,9 @@ Route::prefix('{masjid}')->middleware(['checking'])->group(function () {
         // }
         $description = "1 Lot, " . $transaction->ramadhan . " Ramadhan " . \App\Models\Ramadhan::whereId($transaction->ramadhan_id)->first()->tahun . ", " . $tarikh_masihi;
 
-        $urlToyyibPay = ($transaction->masjid->toyyibpay_secret_key)
+        // get masjid details
+        $detailMasjid = Masjid::whereId($transaction->masjid_id)->first();
+        $urlToyyibPay = ($detailMasjid->toyyibpay_secret_key)
             ? 'https://toyyibpay.com' // prod
             : 'https://dev.toyyibpay.com'; // test
 
@@ -172,8 +174,8 @@ Route::prefix('{masjid}')->middleware(['checking'])->group(function () {
         $result    = $toyyibpay->post($urlToyyibPay . '/index.php/api/createBill', [
             'form_params' => [
                 // 'userSecretKey'           => $masjid->toyyibpay_secret_key,
-                'userSecretKey'           => ($transaction->masjid->toyyibpay_secret_key) ? $transaction->masjid->toyyibpay_secret_key : env('TOY_SKEY'),
-                'categoryCode'            => ($$transaction->masjid->toyyibpay_collection_id) ? $$transaction->masjid->toyyibpay_collection_id : env('TOY_CID'),
+                'userSecretKey'           => ($detailMasjid->toyyibpay_secret_key) ? $detailMasjid->toyyibpay_secret_key : env('TOY_SKEY'),
+                'categoryCode'            => ($detailMasjid->toyyibpay_collection_id) ? $detailMasjid->toyyibpay_collection_id : env('TOY_CID'),
                 'billName'                => $name,
                 'billDescription'          => $description,
                 // 'billDescription'         => 'Bayaran Lot: ' . $lotid . ' untuk Ramadhan: ' . $ramadhan,
