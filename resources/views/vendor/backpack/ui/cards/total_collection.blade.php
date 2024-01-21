@@ -5,12 +5,14 @@
                 <!-- Recent Sponsor List -->
                 <h6 class="font-weight-bold">Transaksi Terkini:</h6>
                 <table width="100%" class="text-muted">
-                    @foreach ($totaltansaksi as $transaksi)
-                        <tr>
-                            <td>{{ $transaksi->nama }}</td>
-                            <td class="text-right">RM {{ $transaksi->jumlah }}</td>
-                        </tr>
-                    @endforeach
+                    @if ($totaltansaksi)
+                        @foreach ($totaltansaksi as $transaksi)
+                            <tr>
+                                <td>{{ $transaksi->nama }}</td>
+                                <td class="text-right">RM {{ $transaksi->jumlah }}</td>
+                            </tr>
+                        @endforeach
+                    @endif
                 </table>
             </div>
             <div class="col-md-6">

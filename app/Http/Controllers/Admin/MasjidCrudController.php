@@ -49,6 +49,8 @@ class MasjidCrudController extends CrudController
         CRUD::column('location');
         CRUD::column('short_name');
         CRUD::column('phone');
+        CRUD::column('toyyibpay_secret_key');
+        CRUD::column('toyyibpay_collection_id');
         // CRUD::column('created_at');
         // CRUD::column('updated_at');
 
@@ -72,6 +74,10 @@ class MasjidCrudController extends CrudController
         CRUD::field('name');
         CRUD::field('short_name');
         CRUD::field('location');
+
+        CRUD::field('toyyibpay_secret_key');
+        CRUD::field('toyyibpay_collection_id');
+
         $this->crud->addfield([
             'name' => 'phone', // Replace with the actual field name
             'type' => 'number',
@@ -107,22 +113,31 @@ class MasjidCrudController extends CrudController
         $user = Auth::user();
 
         // Check if the user has a masjid_user record
-        if (!$user->masjids()->exists()) {
+        if (!$user->masjids()->exists() || auth()->user()->hasRole('Superadmin')) {
             // If not, create a masjid_user record
             $masjid = Masjid::create([
                 'name' => request()->name,
                 'location' => request()->location,
-                'short_name' => request()->short_name
+                'short_name' => request()->short_name,
+                'phone' => request()->phone,
+                'toyyibpay_secret_key' => request()->toyyibpay_secret_key,
+                'toyyibpay_collection_id' => request()->toyyibpay_collection_id,
+                'photo' => request()->photo,
             ]);
 
-            MasjidUser::create([
-                'masjid_id' => $masjid->id,
-                'user_id' => auth()->user()->id
-            ]);
+            if (auth()->user()->hasRole('Admin')) {
+                MasjidUser::create([
+                    'masjid_id' => $masjid->id,
+                    'user_id' => auth()->user()->id
+                ]);
 
-            $user->assignRole('Admin');
+                $user->assignRole('Admin');
+            }
         }
 
+        if (auth()->user()->hasRole('Superadmin')) {
+            return redirect(backpack_url('/masjid'));
+        }
         return redirect(backpack_url('/dashboard'));
     }
 

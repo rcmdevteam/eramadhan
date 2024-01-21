@@ -96,7 +96,8 @@ class RamadhanCrudController extends CrudController
                     'jumlah_lot' => '100',
                     'masjid_id' => auth()->user()->masjids->masjid->id,
                     'ramadhan_id' => $ramadhan->id,
-                    'description' => 'Iftar/Moreh/Bubur Lambuk'
+                    'description' => 'Iftar/Moreh/Bubur Lambuk',
+                    'quota' => 10
                 ]);
             }
         }

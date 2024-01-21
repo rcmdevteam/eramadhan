@@ -11,14 +11,18 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        if (!auth()->user()->hasRole('Admin') && !auth()->user()->hasRole('Superadmin')) {
+        if (!auth()->user()->hasRole('Admin') && !auth()->user()->hasRole('Superadmin') || !auth()->user()->masjids) {
             return redirect(backpack_url('masjid/create'));
         }
 
         // Admin
         if (auth()->user()->hasRole('Admin')) {
-            $totaltansaksi = Transaksi::whereStatus('paid')->whereMasjidId(auth()->user()->masjids->masjid->id)->take(3)->get();
-            $totalCollection = Transaksi::whereStatus('paid')->whereMasjidId(auth()->user()->masjids->masjid->id)->sum('jumlah');
+            $totaltansaksi = null;
+            $totalCollection = null;
+            if (auth()->user()->masjids) {
+                $totaltansaksi = Transaksi::whereStatus('paid')->whereMasjidId(auth()->user()->masjids->masjid->id)->take(3)->get();
+                $totalCollection = Transaksi::whereStatus('paid')->whereMasjidId(auth()->user()->masjids->masjid->id)->sum('jumlah');
+            }
         }
 
         // Superadmin

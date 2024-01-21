@@ -164,13 +164,17 @@ Route::prefix('{masjid}')->middleware(['checking'])->group(function () {
         // }
         $description = "1 Lot, " . $transaction->ramadhan . " Ramadhan " . \App\Models\Ramadhan::whereId($transaction->ramadhan_id)->first()->tahun . ", " . $tarikh_masihi;
 
+        $urlToyyibPay = ($masjid->toyyibpay_secret_key)
+            ? 'https://toyyibpay.com' // prod
+            : 'https://dev.toyyibpay.com'; // test
+
         // Perform Toyyibpay
         $toyyibpay = new \GuzzleHttp\Client(); //GuzzleHttp\Client
-        $result    = $toyyibpay->post('https://dev.toyyibpay.com/index.php/api/createBill', [
+        $result    = $toyyibpay->post($urlToyyibPay . '/index.php/api/createBill', [
             'form_params' => [
                 // 'userSecretKey'           => $masjid->toyyibpay_secret_key,
-                'userSecretKey'           => env('TOY_SKEY'),
-                'categoryCode'            => env('TOY_CID'),
+                'userSecretKey'           => ($masjid->toyyibpay_secret_key) ? $masjid->toyyibpay_secret_key : env('TOY_SKEY'),
+                'categoryCode'            => ($masjid->toyyibpay_collection_id) ? $masjid->toyyibpay_collection_id : env('TOY_CID'),
                 'billName'                => $name,
                 'billDescription'          => $description,
                 // 'billDescription'         => 'Bayaran Lot: ' . $lotid . ' untuk Ramadhan: ' . $ramadhan,
@@ -192,7 +196,7 @@ Route::prefix('{masjid}')->middleware(['checking'])->group(function () {
         $banks = json_decode($result->getBody());
 
         foreach ($banks as $bank) {
-            return redirect()->to('https://dev.toyyibpay.com/' . $bank->BillCode);
+            return redirect()->to($urlToyyibPay . '/' . $bank->BillCode);
         }
     });
 });
