@@ -114,6 +114,8 @@ Route::prefix('{masjid}')->middleware(['checking'])->group(function () {
 
         $masjid = Masjid::where('short_name', $masjid)->firstOrFail();
         $masjidname = $masjid->name;
+        $masjidSecretKey = $masjid->toyyibpay_secret_key;
+        $masjidCollectionId = $masjid->toyyibpay_collection_id;
 
         // $name = request()->nama;
         // $email = request()->email;
@@ -173,8 +175,8 @@ Route::prefix('{masjid}')->middleware(['checking'])->group(function () {
         $result    = $toyyibpay->post($urlToyyibPay . '/index.php/api/createBill', [
             'form_params' => [
                 // 'userSecretKey'           => $masjid->toyyibpay_secret_key,
-                'userSecretKey'           => ($masjid->toyyibpay_secret_key) ? $masjid->toyyibpay_secret_key : env('TOY_SKEY'),
-                'categoryCode'            => ($masjid->toyyibpay_collection_id) ? $masjid->toyyibpay_collection_id : env('TOY_CID'),
+                'userSecretKey'           => ($masjidSecretKey) ? $masjidSecretKey : env('TOY_SKEY'),
+                'categoryCode'            => ($masjidCollectionId) ? $masjidCollectionId : env('TOY_CID'),
                 'billName'                => $name,
                 'billDescription'          => $description,
                 // 'billDescription'         => 'Bayaran Lot: ' . $lotid . ' untuk Ramadhan: ' . $ramadhan,
