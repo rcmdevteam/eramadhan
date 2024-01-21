@@ -113,9 +113,10 @@ Route::prefix('{masjid}')->middleware(['checking'])->group(function () {
         ]);
 
         $masjid = Masjid::where('short_name', $masjid)->firstOrFail();
-        $masjidname = $masjid->name;
-        $masjidSecretKey = $masjid->toyyibpay_secret_key;
-        $masjidCollectionId = $masjid->toyyibpay_collection_id;
+        $masjidDetail = Masjid::where('short_name', $masjid)->firstOrFail();
+
+        $masjidSecretKey = $masjidDetail->toyyibpay_secret_key;
+        $masjidCollectionId = $masjidDetail->toyyibpay_collection_id;
 
         // $name = request()->nama;
         // $email = request()->email;
