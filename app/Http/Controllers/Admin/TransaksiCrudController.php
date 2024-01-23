@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\TransaksiRequest;
 use App\Models\Lot;
 use App\Models\Ramadhan;
+use App\Models\RamadhanTransaction;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
@@ -155,7 +156,28 @@ class TransaksiCrudController extends CrudController
 
     public function store()
     {
-        dd(request()->all());
+        // Get Lot Details
+        $lot = Lot::find(request()->lot_id);
+        $quantity = 1;
+
+        // dd(request()->all(), $lot);
+
+        // perform insert transaction
+        $transaction = new RamadhanTransaction();
+        $transaction->nama = request()->nama;
+        $transaction->emel = request()->emel;
+        $transaction->telefon = request()->telefon;
+        $transaction->ramadhan = $lot->hari;
+        $transaction->jumlah = $lot->jumlah_lot * $quantity;
+        $transaction->kuantiti = $quantity;
+        // $transaction->toyyibpay_ref = $tarikh_masihi;
+        $transaction->status = request()->status;
+        $transaction->ramadhan_id = $lot->ramadhan_id;
+        $transaction->masjid_id = $lot->masjid_id;
+        $transaction->lot_id = $lot->id;
+        $transaction->save();
+
+        return redirect()->to(backpack_url('/transaksi'))->with('success', true);
     }
 
     /**
