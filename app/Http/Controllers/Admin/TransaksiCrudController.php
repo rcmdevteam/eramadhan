@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\TransaksiRequest;
+use App\Models\Lot;
+use App\Models\Ramadhan;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
@@ -14,7 +16,9 @@ use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 class TransaksiCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation {
+        store as traitStore;
+    }
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
@@ -69,17 +73,89 @@ class TransaksiCrudController extends CrudController
     {
         CRUD::setValidation(TransaksiRequest::class);
 
-        CRUD::field('nama');
-        CRUD::field('emel');
-        CRUD::field('telefon');
-        CRUD::field('ramadhan');
-        CRUD::field('jumlah');
+        CRUD::addField([
+            'name' => 'nama',
+            'type' => 'text'
+        ]);
+        CRUD::addField([
+            'name' => 'emel',
+            'type' => 'text'
+        ]);
+        CRUD::addField([
+            'name' => 'telefon',
+            'type' => 'text'
+        ]);
+        $ramadhan = [];
+        for ($i = 1; $i < 31; $i++) {
+            $ramadhan[$i] = $i . ' Ramadhan';
+        }
+
+        /* CRUD::addField([
+            'name' => 'ramadhan',
+            'label' => 'Ramadhan',
+            'type' => 'select_from_array',
+            'options' => $ramadhan
+        ]); // hari */
+
+        /*
+        $lots = [];
+        for ($i = 1; $i < 2; $i++) {
+            $lots[$i] = $i . ' Lot';
+        }
+        CRUD::addField([
+            'name' => 'kuantiti',
+            'label' => 'Jumlah Lot',
+            'type' => 'select_from_array',
+            'options' => $lots
+        ]);*/
+
+        /*CRUD::addField([
+            'name' => 'jumlah',
+            'type' => 'number'
+        ]);*/
+
+        /*CRUD::addField([
+            'name' => 'ramadhan_id',
+            'label' => 'Tahun Ramadhan',
+            'type' => 'select_from_array',
+            'options' => Ramadhan::whereMasjidId(auth()->user()->masjids->masjid->id)->get()->pluck('tahun', 'id')->toArray()
+        ]); // ramadhan ID */
+
+        $lotMasjid = [];
+        foreach (Lot::whereMasjidId(auth()->user()->masjids->masjid->id)->get() as $lot) {
+            $lotMasjid[$lot->id] = $lot->hari . ' Ramadhan. Sasaran: RM' . $lot->sasaran . '. 1 Lot RM' . $lot->jumlah_lot . '. ' . $lot->description . '. Quota: ' . $lot->quota;
+        }
+
+        CRUD::addField([
+            'name' => 'lot_id',
+            'label' => 'Pilihan Lot',
+            'type' => 'select_from_array',
+            'options' => $lotMasjid
+        ]);
+
+        CRUD::addField([
+            'name' => 'status',
+            'label' => 'Status Bayaran',
+            'type' => 'select_from_array',
+            'options' => ['paid' => 'Bayar', 'unpaid' => 'Belom Bayar']
+        ]);
+
+        CRUD::addField([
+            'name' => 'toyyibpay_ref',
+            'label' => 'Keterangan',
+            'type' => 'text'
+        ]); // manual
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:
          * - CRUD::field('price')->type('number');
          * - CRUD::addField(['name' => 'price', 'type' => 'number'])); 
          */
+    }
+
+    public function store()
+    {
+        dd(request()->all());
     }
 
     /**

@@ -11,10 +11,6 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        if (!auth()->user()->hasRole('Admin') && !auth()->user()->hasRole('Superadmin') || !auth()->user()->masjids) {
-            return redirect(backpack_url('masjid/create'));
-        }
-
         // Admin
         if (auth()->user()->hasRole('Admin')) {
             $totaltansaksi = null;
@@ -29,6 +25,13 @@ class DashboardController extends Controller
         if (auth()->user()->hasRole('Superadmin')) {
             $totaltansaksi = null;
             $totalCollection = null;
+        }
+
+        if (!auth()->user()->hasRole('Admin') && !auth()->user()->hasRole('Superadmin') || !auth()->user()->masjids) {
+            if (auth()->user()->hasRole('Superadmin')) {
+                return view('vendor.backpack.ui.dashboard', compact('totaltansaksi', 'totalCollection'));
+            }
+            return redirect(backpack_url('masjid/create'));
         }
 
         return view('vendor.backpack.ui.dashboard', compact('totaltansaksi', 'totalCollection'));

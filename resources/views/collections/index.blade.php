@@ -233,7 +233,8 @@
 
                             <div
                                 class="{{ $lot->hari == '30' ? 'invisible' : 'visible' }} hover:shadow-md rounded-tl-md rounded-tr-md rounded-br-md rounded-bl-md">
-                                <div class="p-4 {{ $lot->quota - $lot->transactions->where('status', 'paid')->count() == 0 ? 'bg-slate-400 cursor-not-allowed' : 'bg-white cursor-pointer lot-ramadhan' }} rounded-tl-md rounded-tr-md"
+                                <div id="lot-{{ $lot->masjid->id }}-{{ $lot->id }}"
+                                    class="p-4 {{ $lot->quota - $lot->transactions->where('status', 'paid')->count() == 0 ? 'bg-slate-400 cursor-not-allowed' : 'bg-white cursor-pointer lot-ramadhan' }} rounded-tl-md rounded-tr-md"
                                     data-lotid="{{ $lot->id }}" data-hari="{{ $lot->hari }}"
                                     data-jumlah="{{ $lot->jumlah_lot }}" data-ramadhan="{{ $lot->ramadhan->id }}"
                                     data-masjid="{{ $lot->masjid->id }}"
@@ -242,7 +243,7 @@
                                     <div class="flex flex-row">
                                         <div>
                                             <div
-                                                class="p-2 rounded-md {{ $lot->quota - $lot->transactions->where('status', 'paid')->count() == 0 ? 'bg-slate-400' : 'bg-zinc-100' }} w-[100px] h-[96px]">
+                                                class="p-2 rounded-md {{ $lot->quota - $lot->transactions->where('status', 'paid')->count() == 0 ? 'bg-zinc-100' : 'bg-zinc-100' }} w-[100px] h-[96px]">
                                                 <h5 class="text-xs upp">Ramadhan</h5>
                                                 <h2 class="text-2xl font-bold">{{ $lot->hari }}</h2>
                                                 <p class="text-xs text-gray-500">
@@ -256,8 +257,10 @@
                                         <div class="text-right flex flex-col items-right w-full pt-1">
                                             <h3 class="font-bold">RM {{ $lot->jumlah_lot }} / lot</h3>
                                             <p class="text-sm text-gray-500">Jumlah Tajaan: RM {{ $lot->sasaran }}</p>
-                                            <p class="text-sm text-gray-500">Lot Kosong: <span
-                                                    class="{{ $lot->quota - $lot->transactions->where('status', 'paid')->count() == 0 ? '' : 'text-red-600 font-bold' }}">{{ $lot->quota - $lot->transactions->where('status', 'paid')->count() }}/{{ $lot->quota }}</span>
+                                            <p class="text-sm text-gray-500">Lot Kosong:
+                                                <span
+                                                    class="{{ $lot->quota - $lot->transactions->where('status', 'paid')->count() == 0 ? '' : 'text-red-600 font-bold' }}"
+                                                    id="lot-{{ $lot->masjid->id }}-{{ $lot->id }}-kosong">{{ $lot->quota - $lot->transactions->where('status', 'paid')->count() }}/{{ $lot->quota }}</span>
                                             </p>
                                             <p class="text-sm text-gray-500">{{ $lot->description }}</p>
                                         </div>
@@ -296,6 +299,8 @@
                     @endif
                 </div>
             </div>
+
+            <div id="stock-status"></div>
 
             <div class="text-center mt-20">
                 <p class="text-sm text-gray-400">&copy; eRamadhan</p>
@@ -380,7 +385,7 @@
         integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
     <script>
         $(document).ready(function() {
-            $(".lot-ramadhan").on("click", function() {
+            function clickFormHandler() {
                 // Get data from the clicked div
                 var lotid = $(this).data("lotid");
                 var hari = $(this).data("hari");
@@ -406,14 +411,17 @@
                 $('#form_container').find('input[name="_token"]').val(csrfToken);
 
                 // Toggle classes to show the form
-                $('#form_backdrop').removeClass("invisible").addClass("visible");
-                $("#form_container").removeClass("invisible").addClass("visible");
-            });
+                $('#form_backdrop').removeClass("invisible").addClass("visible open")
+                $("#form_container").removeClass("invisible").addClass("visible open")
 
-            $("#close_form").on("click", function() {
+                $('#form_backdrop').attr('data-lotid', lotid);
+                $('#form_container').attr('data-lotid', lotid);
+            }
+
+            function closeFormHandler() {
                 // Hide the form and clear input fields
-                $('#form_container').removeClass("visible").addClass("invisible");
-                $('#form_backdrop').removeClass("visible").addClass("invisible");
+                $('#form_container').removeClass("visible open").addClass("invisible");
+                $('#form_backdrop').removeClass("visible open").addClass("invisible");
 
                 $('#form_container').find('input[type="text"]').val('');
                 $('#form_container').find('input[type="hidden"]').val('');
@@ -421,7 +429,9 @@
                 $('#form_container').find('input[type="hidden"]').val('');
 
                 $('#form_container').find('form')[0].reset();
-            });
+            }
+
+            $("#close_form").on("click", closeFormHandler);
 
             $("#submitBtn").on("click", function() {
                 $("#form_container").removeClass("visible").addClass("invisible");
@@ -431,6 +441,42 @@
                 var lotid = $(this).data("lotid");
                 $("#senarai" + lotid).toggle("slow");
             });
+
+            // SSE lots
+            const eventSource = new EventSource('{{ url('/data/lot') }}');
+
+            eventSource.onmessage = function(event) {
+                const stream = JSON.parse(event.data);
+                $.each(stream.original.data, function(index, item) {
+                    // console.log(item.full);
+                    let divLot = '#lot-' + item.mid + '-' + item.lid;
+                    // if full booking
+                    if (item.full == "true") {
+                        $(divLot)
+                            .removeClass("bg-white cursor-pointer lot-ramadhan")
+                            .addClass("bg-slate-400 cursor-not-allowed");
+                        $(divLot).off();
+                        $(divLot + '-kosong')
+                            .html(item.available)
+                            .removeClass("text-red-600 font-bold");
+
+                        $('#form_backdrop[data-lotid=' + item.lid + ']')
+                            .removeClass("visible open")
+                            .addClass("invisible");
+
+                        $('#form_container[data-lotid=' + item.lid + ']')
+                            .removeClass("visible open")
+                            .addClass("invisible");
+                    } else {
+                        $(divLot)
+                            .addClass("bg-white cursor-pointer lot-ramadhan")
+                            .removeClass("bg-slate-400 cursor-not-allowed");
+                        $(".lot-ramadhan").on("click", clickFormHandler);
+                        $(divLot + '-kosong').html(item.available)
+                            .addClass("text-red-600 font-bold");
+                    }
+                });
+            };
         });
     </script>
 </body>

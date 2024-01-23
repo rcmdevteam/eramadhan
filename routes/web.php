@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers;
 use App\Models\Lot;
 use App\Models\Masjid;
 use App\Models\Ramadhan;
@@ -26,6 +27,8 @@ Route::get('/', function () {
 Route::get('/home', function () {
     return redirect(backpack_url('/dashboard'));
 });
+
+Route::get('/data/lot', 'App\Http\Controllers\PublicController@getDataLots');
 
 Route::any('/payment/toyyibpay/callback', function (Request $request) {
     \Log::info(request()->all());
@@ -195,6 +198,12 @@ Route::prefix('{masjid}')->middleware(['checking'])->group(function () {
         ]);
 
         $banks = json_decode($result->getBody());
+
+        // check last buffer
+        $lot = Lot::find($transaction->lot_id);
+        if (($lot->quota - $lot->transactions->where('status', 'paid')->count()) == 0) {
+            return redirect()->back()->with('error', true)->with('message', 'Opps! You just passed the quota! Cuba lain slot');
+        }
 
         foreach ($banks as $bank) {
             return redirect()->to($urlToyyibPay . '/' . $bank->BillCode);
