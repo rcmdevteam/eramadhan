@@ -448,7 +448,7 @@
             eventSource.onmessage = function(event) {
                 const stream = JSON.parse(event.data);
                 $.each(stream.original.data, function(index, item) {
-                    // console.log(item.full);
+                    console.log(item);
                     let divLot = '#lot-' + item.mid + '-' + item.lid;
                     // if full booking
                     if (item.full == "true") {
