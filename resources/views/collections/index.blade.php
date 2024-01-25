@@ -443,7 +443,7 @@
             });
 
             // SSE lots
-            const eventSource = new EventSource('{{ url('/data/lot') }}');
+            const eventSource = new EventSource('{{ url('/data/lot?masjid_id=' . $masjid->id) }}');
 
             eventSource.onmessage = function(event) {
                 const stream = JSON.parse(event.data);

@@ -40,8 +40,9 @@ class PublicController extends Controller
         $lot = 1;
         $quota = 0;
         $lots = [];
+        $masjidId = request()->masjid_id;
 
-        foreach (Lot::whereMasjidId(18)->orderBy('hari', 'asc')->get() as $lot) {
+        foreach (Lot::whereMasjidId($masjidId)->orderBy('hari', 'asc')->get() as $lot) {
             $lots[] = [
                 'lid' => $lot->id,
                 'mid' => $lot->masjid->id,
