@@ -42,6 +42,8 @@
                 href='{{ backpack_url('masjid/' . auth()->user()->masjids->masjid_id . '/edit') }}'><i
                     class='nav-icon la la-mosque'></i>
                 Masjid</a></li>
+        <li class='nav-item d-none'><a class='nav-link' href='{{ backpack_url('system-setting') }}'><i
+                    class='nav-icon la la-cog'></i> Settings</a></li>
     @endrole
 @endif
 
@@ -71,7 +73,8 @@
     <li class="nav-item nav-dropdown">
         <a class="nav-link nav-dropdown-toggle" href="#"><i class="nav-icon la la-group"></i> Authentication</a>
         <ul class="nav-dropdown-items">
-            <li class="nav-item"><a class="nav-link" href="{{ backpack_url('user') }}"><i class="nav-icon la la-user"></i>
+            <li class="nav-item"><a class="nav-link" href="{{ backpack_url('user') }}"><i
+                        class="nav-icon la la-user"></i>
                     <span>Users</span></a></li>
             <li class="nav-item"><a class="nav-link" href="{{ backpack_url('role') }}"><i
                         class="nav-icon la la-user-tag"></i> <span>Roles</span></a></li>

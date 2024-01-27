@@ -154,11 +154,16 @@ class TransaksiCrudController extends CrudController
          */
     }
 
-    public function store()
+    public function store(TransaksiRequest $request)
     {
         // Get Lot Details
         $lot = Lot::find(request()->lot_id);
         $quantity = 1;
+
+        if (($lot->quota - $lot->transactions->where('status', 'paid')->count()) == 0) {
+            \Alert::add('warning', 'Tempahan untuk lot ini sudah penuh.')->flash();
+            return redirect()->back()->withInput();
+        }
 
         // dd(request()->all(), $lot);
 
@@ -170,7 +175,7 @@ class TransaksiCrudController extends CrudController
         $transaction->ramadhan = $lot->hari;
         $transaction->jumlah = $lot->jumlah_lot * $quantity;
         $transaction->kuantiti = $quantity;
-        // $transaction->toyyibpay_ref = $tarikh_masihi;
+        $transaction->toyyibpay_ref = request()->toyyibpay_ref;
         $transaction->status = request()->status;
         $transaction->ramadhan_id = $lot->ramadhan_id;
         $transaction->masjid_id = $lot->masjid_id;
@@ -189,5 +194,36 @@ class TransaksiCrudController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+    }
+
+    public function update()
+    {
+        // Get Lot Details
+        $lot = Lot::find(request()->lot_id);
+        $quantity = 1;
+
+        if (($lot->quota - $lot->transactions->where('status', 'paid')->count()) == 0) {
+            \Alert::add('warning', 'Tempahan untuk lot ini sudah penuh.')->flash();
+            return redirect()->back()->withInput();
+        }
+
+        // dd(request()->all(), $lot);
+
+        // perform insert transaction
+        $transaction = new RamadhanTransaction();
+        $transaction->nama = request()->nama;
+        $transaction->emel = request()->emel;
+        $transaction->telefon = request()->telefon;
+        $transaction->ramadhan = $lot->hari;
+        $transaction->jumlah = $lot->jumlah_lot * $quantity;
+        $transaction->kuantiti = $quantity;
+        $transaction->toyyibpay_ref = request()->toyyibpay_ref;
+        $transaction->status = request()->status;
+        $transaction->ramadhan_id = $lot->ramadhan_id;
+        $transaction->masjid_id = $lot->masjid_id;
+        $transaction->lot_id = $lot->id;
+        $transaction->save();
+
+        return redirect()->to(backpack_url('/transaksi'))->with('success', true);
     }
 }

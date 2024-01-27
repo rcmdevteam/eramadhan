@@ -85,6 +85,13 @@ class MasjidCrudController extends CrudController
             'hint' => 'Contoh: 60132465974'
         ]);
 
+        CRUD::addField([
+            'name' => 'offline',
+            'label' => 'System Offline',
+            'type' => 'select_from_array',
+            'options' => ['1' => 'Online', '0' => 'Offline']
+        ]);
+
         if ($this->crud->getActionMethod() == 'edit' || $this->crud->getActionMethod() == 'update') {
             CRUD::addField(
                 [
@@ -150,6 +157,7 @@ class MasjidCrudController extends CrudController
      */
     protected function setupUpdateOperation()
     {
+        $this->crud->removeSaveActions(['save_and_back', 'save_and_new', 'save_and_preview']);
         $this->setupCreateOperation();
     }
 }

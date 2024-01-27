@@ -95,8 +95,16 @@ Route::any('/payment/toyyibpay/callback', function (Request $request) {
 
 
 Route::prefix('{masjid}')->middleware(['checking'])->group(function () {
+
+
+
     Route::get('/', function ($masjid) {
         $masjid = Masjid::where('short_name', $masjid)->firstOrFail();
+
+        if ($masjid->offline == 0) {
+            return view('offline.index', compact('masjid', $masjid));
+        }
+
         $ramadhan = Ramadhan::where('tahun', 1445)->where('masjid_id', $masjid->id)->firstOrFail();
         $lots = Lot::where('masjid_id', $masjid->id)->where('ramadhan_id', $ramadhan->id)->orderBy('hari', 'ASC')->get();
 

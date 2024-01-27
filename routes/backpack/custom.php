@@ -47,4 +47,5 @@ Route::group([
     Route::crud('ramadhan', 'RamadhanCrudController');
     Route::crud('transaksi', 'TransaksiCrudController');
     Route::crud('lot', 'LotCrudController');
+    Route::crud('system-setting', 'SystemSettingCrudController');
 }); // this should be the absolute last line of this file
