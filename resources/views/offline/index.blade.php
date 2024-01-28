@@ -18,9 +18,9 @@
     <div class="container text-center h-screen items-center mt-10 px-4">
         <h1 class="text-xl mb-10">{{ $masjid->name }}</h1>
         <h1>Sistem dalam penyelenggaraan.</h1>
-        <p class="text-zinc-400">Sila berhubung dengan pentadbir {{ $masjid->name }} di <a
+        <p class="">Sila berhubung dengan pentadbir {{ $masjid->name }} di <a
                 href="https://wa.me/{{ $masjid->phone }}">Whatsapp</a></p>
-        <p class="text-sm mt-20 text-zinc-400">&copy; eRamadhan</p>
+        <p class="text-sm mt-2">&copy; eRamadhan</p>
     </div>
 </body>
 
