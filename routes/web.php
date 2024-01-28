@@ -101,7 +101,7 @@ Route::prefix('{masjid}')->middleware(['checking'])->group(function () {
     Route::get('/', function ($masjid) {
         $masjid_details = Masjid::where('short_name', $masjid)->firstOrFail();
 
-        if ($masjid->offline == 0) {
+        if ($masjid_details->offline == 0) {
             return view('offline.index', compact('masjid', $masjid_details));
         }
 
