@@ -102,7 +102,7 @@ Route::prefix('{masjid}')->middleware(['checking'])->group(function () {
         $masjid = Masjid::where('short_name', $masjid)->firstOrFail();
 
         if ($masjid->offline == 0) {
-            return view('offline.index', compact('masjid', $masjid));
+            return view('offline.index', compact('masjid'));
         }
 
         $ramadhan = Ramadhan::where('tahun', 1445)->where('masjid_id', $masjid->id)->firstOrFail();
