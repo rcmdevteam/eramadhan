@@ -124,7 +124,11 @@ class TransaksiCrudController extends CrudController
 
         $lotMasjid = [];
         foreach (Lot::whereMasjidId(auth()->user()->masjids->masjid->id)->get() as $lot) {
-            $lotMasjid[$lot->id] = $lot->hari . ' Ramadhan. Sasaran: RM' . $lot->sasaran . '. 1 Lot RM' . $lot->jumlah_lot . '. ' . $lot->description . '. Quota: ' . $lot->quota;
+            $lotMasjid[$lot->id] =
+                // $lot->hari . ' Ramadhan. Quota: ' . ($lot->quota - $lot->transactions->where('status', 'paid')->count()) . '/' . $lot->quota . '. RM ' . $lot->sasaran . '. 1 Lot RM' . 
+                // $lot->jumlah_lot . '. ' . $lot->description;
+
+                $lot->hari . ' Ramadhan. Quota: ' . ($lot->quota - $lot->transactions->where('status', 'paid')->count()) . '/' . $lot->quota . '. 1 Lot RM' . $lot->jumlah_lot . '. ';
         }
 
         CRUD::addField([
