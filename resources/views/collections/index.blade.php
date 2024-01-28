@@ -35,7 +35,9 @@
                     @if (!request('transaction_id'))
                         <div class="mb-10">
                             <form action="#" class="flex flex-col">
-                                <label for="telefon" class="inline text-slate-600">Semak Tempahan:</label>
+                                <label for="telefon" class="inline text-slate-600">Semak Tempahan: <br><span
+                                        class="text-sm text-zinc-400">Masukkan Nombor
+                                        Telefon dan Tekan Enter</span></label>
                                 <input type="number" name="telefon" placeholder="60123456789"
                                     class="p-1 rounded px-2 w-[200px] mr-auto ml-auto text-center mt-2 border"
                                     value="{{ request('telefon') }}">
