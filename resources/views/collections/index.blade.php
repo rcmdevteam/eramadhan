@@ -15,7 +15,7 @@
 
 <body class="bg-zinc-100 overflow-x-hidden">
     <div class="w-full"
-        style="background-image: url('https://masjid.islam.gov.my/portals/assets/img/img_slider/sliderPortal-20220131-0754.jpg'); background-size: cover; background-position: center center">
+        style="background-image: url('{!! Storage::url($masjid->cover) !!}'); background-size: cover; background-position: center center">
         <div class="container h-[150px] md:h-[250px]">
         </div>
     </div>
